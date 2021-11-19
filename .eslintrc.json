@@ -1,0 +1,45 @@
+{
+  "root": true,
+  "env": {
+    "node": true
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "extends": [
+    "@rebeccastevens/eslint-config/modern",
+    "@rebeccastevens/eslint-config/typescript",
+    "@rebeccastevens/eslint-config/common-overrides",
+    "@rebeccastevens/eslint-config/script",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "parserOptions": {
+    "project": [
+      "./tsconfig.json",
+      "./benchmark/tsconfig.json",
+      "./tests/tsconfig.json"
+    ]
+  },
+  "ignorePatterns": [
+    "/build",
+    "/typings",
+    "/**/*.cjs",
+    "/**/*.mjs",
+    "/**/*.js"
+  ],
+  "rules": {
+    "import/no-unresolved": "off"
+  },
+  "overrides": [
+    {
+      "files": "src/**",
+      "env": {
+        "node": true
+      },
+      "rules": {
+        "functional/prefer-readonly-type": "off"
+      }
+    }
+  ]
+}

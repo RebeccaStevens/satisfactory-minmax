@@ -1,0 +1,9 @@
+{
+  "./**/*.{md,yml}": [
+    "prettier --write"
+  ],
+  "./**/*.{ts,mts}": [
+    "prettier --write",
+    "eslint --fix"
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "embeddedLanguageFormatting": "off",
+  "overrides": [
+    {
+      "files": "*.mts",
+      "options": {
+        "parser": "typescript"
+      }
+    }
+  ]
+}
