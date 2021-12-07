@@ -40,6 +40,12 @@
       "rules": {
         "functional/prefer-readonly-type": "off"
       }
+    },
+    {
+      "files": "src/data/game/raw-collection-parser.mts",
+      "rules": {
+        "eslint-comments/no-unlimited-disable": "off"
+      }
     }
   ]
 }
