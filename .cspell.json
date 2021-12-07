@@ -32,7 +32,11 @@
     "// @ts-.*"
   ],
   "words": [
-    "sonarjs"
+    "buildable",
+    "caterium",
+    "fullname",
+    "sonarjs",
+    "typeguard"
   ],
   "overrides": [
     {

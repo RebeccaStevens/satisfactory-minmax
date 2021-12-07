@@ -198,7 +198,7 @@ function getAppliedWaterPumpRecipes(
 }
 
 /**
- * The all the resource well extaction recipes applied to the possible machines.
+ * The all the resource well extraction recipes applied to the possible machines.
  */
 function getAppliedResourceWellRecipes(
   recipe: ImmutableResourceWellRecipe,
