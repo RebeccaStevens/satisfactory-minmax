@@ -23,6 +23,7 @@ export const enum RecipeType {
   RESOURCE_NODE = "extract resource node",
   RESOURCE_WELL = "extract resource well",
   SINK = "sink",
+  GEOTHERMAL_POWER = "geothermal power",
   PART = "manufacturing",
 }
 
@@ -30,6 +31,7 @@ export type Recipe =
   | ResourceNodeRecipe
   | ResourceWellRecipe
   | SinkRecipe
+  | GeothermalPowerRecipe
   | PartRecipe;
 
 /**
@@ -59,6 +61,13 @@ export type PartRecipe = RecipeBase & {
  */
 export type ResourceNodeRecipe = RecipeBase & {
   recipeType: RecipeType.RESOURCE_NODE;
+};
+
+/**
+ * A geothermal power recipe.
+ */
+export type GeothermalPowerRecipe = RecipeBase & {
+  recipeType: RecipeType.GEOTHERMAL_POWER;
 };
 
 /**
@@ -107,6 +116,14 @@ export type AppliedPartRecipe = AppliedRecipeBase & {
  */
 export type AppliedResourceNodeRecipe = AppliedRecipeBase & {
   recipeType: ResourceNodeRecipe["recipeType"];
+  purity: ImmutablePurity;
+};
+
+/**
+ * A resource node extraction recipe applied to a machine.
+ */
+export type AppliedGeothermalPowerRecipe = AppliedRecipeBase & {
+  recipeType: GeothermalPowerRecipe["recipeType"];
   purity: ImmutablePurity;
 };
 

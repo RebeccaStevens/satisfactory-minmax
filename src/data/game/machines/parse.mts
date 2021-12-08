@@ -24,6 +24,7 @@ import {
   isRawManufacturingMachine,
   isRawExtractingMachine,
   isRawMachineBase,
+  isRawVariablePowerProducingMachine,
 } from "./raw-types.mjs";
 import type {
   RawExtractingMachine,
@@ -33,6 +34,8 @@ import type {
   RawPowerProducingMachine,
   RawItemSinkMachine,
   RawFrackingActivatorMachine,
+  RawVariablePowerProducingMachine,
+  RawPowerProducingMachineBase,
 } from "./raw-types.mjs";
 import type {
   FrackingActivatorMachine,
@@ -47,6 +50,8 @@ import type {
   ManufacturingVariablePowerMachine,
   NodeExtractingMachine,
   PowerProducingMachine,
+  PowerProducingMachineBase,
+  VariablePowerProducingMachine,
 } from "./types.mjs";
 import { MachineType } from "./types.mjs";
 
@@ -80,10 +85,14 @@ export function parseMachines(
     ...parsePowerProducingMachines(
       [
         "Class'/Script/FactoryGame.FGBuildableGeneratorFuel'",
-        // "Class'/Script/FactoryGame.FGBuildableGeneratorGeoThermal'",
         "Class'/Script/FactoryGame.FGBuildableGeneratorNuclear'",
       ].flatMap(getRawDataClasses),
       items.byInternalClassName
+    ),
+    ...parseVariablePowerProducingMachines(
+      ["Class'/Script/FactoryGame.FGBuildableGeneratorGeoThermal'"].flatMap(
+        getRawDataClasses
+      )
     ),
     ...parseNodeExtractingMachines(
       ["Class'/Script/FactoryGame.FGBuildableResourceExtractor'"].flatMap(
@@ -516,6 +525,42 @@ function parseWaterPumpMachine(
 }
 
 /**
+ * Parse the base data for a power producing machine.
+ */
+function parseBasePowerProducingMachine(
+  rawData: RawPowerProducingMachineBase,
+  machineType: MachineType.POWER_PRODUCING
+): PowerProducingMachine;
+
+/**
+ * Parse the base data for a variable power producing machine.
+ */
+function parseBasePowerProducingMachine(
+  rawData: RawPowerProducingMachineBase,
+  machineType: MachineType.VARIABLE_POWER_PRODUCING
+): VariablePowerProducingMachine;
+
+function parseBasePowerProducingMachine(
+  rawData: RawPowerProducingMachineBase,
+  machineType: PowerProducingMachineBase["machineType"]
+): PowerProducingMachineBase {
+  const base = parseMachineBase(rawData, machineType);
+
+  const powerProduction = Number.parseFloat(rawData.mPowerProduction);
+  const powerProductionExponent = Number.parseFloat(
+    rawData.mPowerProductionExponent
+  );
+  assert(Number.isFinite(powerProduction));
+  assert(Number.isFinite(powerProductionExponent));
+
+  return {
+    ...base,
+    powerProduction,
+    powerProductionExponent,
+  };
+}
+
+/**
  * Parse the data for all the power producing machines.
  */
 function parsePowerProducingMachines(
@@ -540,22 +585,19 @@ function parsePowerProducingMachines(
 function parsePowerProducingMachine(
   rawData: RawPowerProducingMachine,
   itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
-): [string, PowerProducingMachine & HasMachineRecipes] {
-  const base = parseMachineBase(rawData, MachineType.POWER_PRODUCING);
+): [string, PowerProducingMachine] {
+  const base = parseBasePowerProducingMachine(
+    rawData,
+    MachineType.POWER_PRODUCING
+  );
 
   const fuelAmount = Number.parseFloat(rawData.mFuelLoadAmount);
   const supplementalLoadAmount = Number.parseFloat(
     rawData.mSupplementalLoadAmount
   );
-  const powerProduction = Number.parseFloat(rawData.mPowerProduction);
-  const powerProductionExponent = Number.parseFloat(
-    rawData.mPowerProductionExponent
-  );
 
   assert(Number.isFinite(fuelAmount));
   assert(Number.isFinite(supplementalLoadAmount));
-  assert(Number.isFinite(powerProduction));
-  assert(Number.isFinite(powerProductionExponent));
 
   const machineRecipes = new Set<MachineRecipe>(
     rawData.mFuel
@@ -610,7 +652,7 @@ function parsePowerProducingMachine(
                 itemAmounts[0] !== null
             )
           ),
-          duration: fuelItem.energy / powerProduction,
+          duration: fuelItem.energy / base.powerProduction,
           variablePowerConsumptionConstant: 0,
           variablePowerConsumptionFactor: 1,
         };
@@ -620,8 +662,72 @@ function parsePowerProducingMachine(
 
   const machine = {
     ...base,
-    powerProduction,
-    powerProductionExponent,
+    machineRecipes,
+  };
+
+  return [rawData.ClassName, machine];
+}
+
+/**
+ * Parse the data for all of the variable power producing machines.
+ */
+function parseVariablePowerProducingMachines(rawData: ImmutableArray<unknown>) {
+  return rawData.map((rawClassData) => {
+    assert(
+      isObject(rawClassData) &&
+        isRawBase(rawClassData) &&
+        isRawMachineBase(rawClassData) &&
+        isRawVariablePowerProducingMachine(rawClassData)
+    );
+
+    return parseVariablePowerProducingMachine(rawClassData);
+  });
+}
+
+/**
+ * Parse the data for a variable power producing machine.
+ */
+function parseVariablePowerProducingMachine(
+  rawData: RawVariablePowerProducingMachine
+): [string, VariablePowerProducingMachine] {
+  const base = parseBasePowerProducingMachine(
+    rawData,
+    MachineType.VARIABLE_POWER_PRODUCING
+  );
+
+  const variablePowerProductionConstant = Number.parseFloat(
+    rawData.mVariablePowerProductionConstant
+  );
+  const variablePowerProductionFactor = Number.parseFloat(
+    rawData.mVariablePowerProductionFactor
+  );
+  const variablePowerProductionCycleLength = Number.parseFloat(
+    rawData.mVariablePowerProductionCycleLength
+  );
+
+  assert(Number.isFinite(variablePowerProductionConstant));
+  assert(Number.isFinite(variablePowerProductionFactor));
+  assert(Number.isFinite(variablePowerProductionCycleLength));
+
+  const machineRecipes = new Set<MachineRecipe>([
+    {
+      id: snakeCase(`geothermal power`),
+      name: `Geothermal Power`,
+      recipeType: RecipeType.GEOTHERMAL_POWER,
+      alternate: false,
+      ingredientAmounts: new Map(),
+      productAmounts: new Map(),
+      duration: 2,
+      variablePowerConsumptionConstant: 0,
+      variablePowerConsumptionFactor: 1,
+    },
+  ]);
+
+  const machine = {
+    ...base,
+    variablePowerProductionConstant,
+    variablePowerProductionFactor,
+    variablePowerProductionCycleLength,
     machineRecipes,
   };
 

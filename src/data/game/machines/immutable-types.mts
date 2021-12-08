@@ -9,6 +9,7 @@ import type {
   ManufacturingVariablePowerMachine,
   NodeExtractingMachine,
   PowerProducingMachine,
+  VariablePowerProducingMachine,
 } from "./types.mjs";
 
 export type ImmutableMachine =
@@ -18,7 +19,8 @@ export type ImmutableMachine =
   | ImmutableManufacturingMachine
   | ImmutableManufacturingVariablePowerMachine
   | ImmutableNodeExtractingMachine
-  | ImmutablePowerProducingMachine;
+  | ImmutablePowerProducingMachine
+  | ImmutableVariablePowerProducingMachine;
 
 export type ImmutableManufacturingMachine = Readonly<ManufacturingMachine>;
 
@@ -31,6 +33,9 @@ export type ImmutableFrackingExtractorMachine =
   Readonly<FrackingExtractorMachine>;
 
 export type ImmutablePowerProducingMachine = Readonly<PowerProducingMachine>;
+
+export type ImmutableVariablePowerProducingMachine =
+  Readonly<VariablePowerProducingMachine>;
 
 export type ImmutableItemSinkMachine = Readonly<ItemSinkMachine>;
 

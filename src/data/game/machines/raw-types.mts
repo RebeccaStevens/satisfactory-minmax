@@ -94,7 +94,28 @@ export function isRawExtractingMachine<T extends RawMachineBase>(
   );
 }
 
+export type RawPowerProducingMachineBase = RawMachineBase &
+  Readonly<{
+    mPowerProduction: string;
+    mPowerProductionExponent: string;
+  }>;
+
+/**
+ * Typeguard for raw power producing machine base data.
+ */
+export function isRawPowerProducingMachineBase<T extends RawMachineBase>(
+  rawData: T
+): rawData is RawPowerProducingMachineBase & T {
+  return (
+    Object.hasOwn(rawData, "mPowerProduction") &&
+    typeof rawData.mPowerProduction === "string" &&
+    Object.hasOwn(rawData, "mPowerProductionExponent") &&
+    typeof rawData.mPowerProductionExponent === "string"
+  );
+}
+
 export type RawPowerProducingMachine = RawMachineBase &
+  RawPowerProducingMachineBase &
   Readonly<{
     mFuel: Readonly<
       ReadonlyArray<
@@ -109,8 +130,6 @@ export type RawPowerProducingMachine = RawMachineBase &
     mFuelLoadAmount: string;
     mRequiresSupplementalResource: string;
     mSupplementalLoadAmount: string;
-    mPowerProduction: string;
-    mPowerProductionExponent: string;
   }>;
 
 /**
@@ -120,6 +139,7 @@ export function isRawPowerProducingMachine<T extends RawMachineBase>(
   rawData: T
 ): rawData is RawPowerProducingMachine & T {
   return (
+    isRawPowerProducingMachineBase(rawData) &&
     Object.hasOwn(rawData, "mFuel") &&
     Array.isArray(rawData.mFuel) &&
     rawData.mFuel.every(
@@ -138,11 +158,32 @@ export function isRawPowerProducingMachine<T extends RawMachineBase>(
     Object.hasOwn(rawData, "mRequiresSupplementalResource") &&
     typeof rawData.mRequiresSupplementalResource === "string" &&
     Object.hasOwn(rawData, "mSupplementalLoadAmount") &&
-    typeof rawData.mSupplementalLoadAmount === "string" &&
-    Object.hasOwn(rawData, "mPowerProduction") &&
-    typeof rawData.mPowerProduction === "string" &&
-    Object.hasOwn(rawData, "mPowerProductionExponent") &&
-    typeof rawData.mPowerProductionExponent === "string"
+    typeof rawData.mSupplementalLoadAmount === "string"
+  );
+}
+
+export type RawVariablePowerProducingMachine = RawPowerProducingMachine &
+  RawPowerProducingMachineBase &
+  Readonly<{
+    mVariablePowerProductionConstant: string;
+    mVariablePowerProductionFactor: string;
+    mVariablePowerProductionCycleLength: string;
+  }>;
+
+/**
+ * Typeguard for raw variable power producing machine data.
+ */
+export function isRawVariablePowerProducingMachine<T extends RawMachineBase>(
+  rawData: T
+): rawData is RawVariablePowerProducingMachine & T {
+  return (
+    isRawPowerProducingMachineBase(rawData) &&
+    Object.hasOwn(rawData, "mVariablePowerProductionConstant") &&
+    typeof rawData.mVariablePowerProductionConstant === "string" &&
+    Object.hasOwn(rawData, "mVariablePowerProductionFactor") &&
+    typeof rawData.mVariablePowerProductionFactor === "string" &&
+    Object.hasOwn(rawData, "mVariablePowerProductionCycleLength") &&
+    typeof rawData.mVariablePowerProductionCycleLength === "string"
   );
 }
 

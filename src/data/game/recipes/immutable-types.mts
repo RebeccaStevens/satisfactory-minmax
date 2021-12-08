@@ -1,9 +1,3 @@
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
-import type { ImmutableMachine } from "src/data/game/machines/immutable-types.mjs";
-import type {
-  ImmutablePurity,
-  ImmutableResourceWell,
-} from "src/data/map/immutable-types.mjs";
 import type { ImmutableMap, ImmutableSet } from "src/immutable-types.mjs";
 import type { MapKeyElement, MapValueElement, SetElement } from "src/types.mjs";
 
@@ -19,18 +13,17 @@ import type {
   ResourceWellRecipe,
   SinkRecipe,
   PartRecipe,
+  GeothermalPowerRecipe,
+  AppliedGeothermalPowerRecipe,
 } from "./types.mjs";
 
-export type ImmutableItemAmount = Readonly<
-  ItemAmount & {
-    item: ImmutableItem;
-  }
->;
+export type ImmutableItemAmount = Readonly<ItemAmount>;
 
 export type ImmutableRecipe =
   | ImmutableResourceNodeRecipe
   | ImmutableResourceWellRecipe
   | ImmutableSinkRecipe
+  | ImmutableGeothermalPowerRecipe
   | ImmutablePartRecipe;
 
 type ImmutableRecipeBaseCollections = {
@@ -56,6 +49,9 @@ export type ImmutablePartRecipe = ImmutableRecipeBase &
 export type ImmutableResourceNodeRecipe = ImmutableRecipeBase &
   Readonly<Omit<ResourceNodeRecipe, keyof ImmutableRecipeBaseCollections>>;
 
+export type ImmutableGeothermalPowerRecipe = ImmutableRecipeBase &
+  Readonly<Omit<GeothermalPowerRecipe, keyof ImmutableRecipeBaseCollections>>;
+
 export type ImmutableResourceWellRecipe = ImmutableRecipeBase &
   Readonly<Omit<ResourceWellRecipe, keyof ImmutableRecipeBaseCollections>>;
 
@@ -66,30 +62,28 @@ export type ImmutableAppliedRecipe =
   | ImmutableAppliedResourceNodeRecipe
   | ImmutableAppliedResourceWellRecipe
   | ImmutableAppliedSinkRecipe
+  | ImmutableAppliedGeothermalPowerRecipe
   | ImmutableAppliedPartRecipe;
 
 export type ImmutableAppliedRecipeBase = ImmutableRecipeBase &
-  Readonly<
-    Omit<AppliedRecipeBase, keyof ImmutableRecipeBaseCollections> & {
-      machine: ImmutableMachine;
-    }
-  >;
+  Readonly<Omit<AppliedRecipeBase, keyof ImmutableRecipeBaseCollections>>;
 
 export type ImmutableAppliedPartRecipe = ImmutableAppliedRecipeBase &
   Readonly<Omit<AppliedPartRecipe, keyof ImmutableRecipeBaseCollections>>;
 
 export type ImmutableAppliedResourceNodeRecipe = ImmutableAppliedRecipeBase &
   Readonly<
-    Omit<AppliedResourceNodeRecipe, keyof ImmutableRecipeBaseCollections> & {
-      purity: ImmutablePurity;
-    }
+    Omit<AppliedResourceNodeRecipe, keyof ImmutableRecipeBaseCollections>
+  >;
+
+export type ImmutableAppliedGeothermalPowerRecipe = ImmutableAppliedRecipeBase &
+  Readonly<
+    Omit<AppliedGeothermalPowerRecipe, keyof ImmutableRecipeBaseCollections>
   >;
 
 export type ImmutableAppliedResourceWellRecipe = ImmutableAppliedRecipeBase &
   Readonly<
-    Omit<AppliedResourceWellRecipe, keyof ImmutableRecipeBaseCollections> & {
-      resourceWell: ImmutableResourceWell;
-    }
+    Omit<AppliedResourceWellRecipe, keyof ImmutableRecipeBaseCollections>
   >;
 
 export type ImmutableAppliedSinkRecipe = ImmutableAppliedRecipeBase &

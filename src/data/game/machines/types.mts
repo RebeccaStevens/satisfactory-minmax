@@ -13,7 +13,8 @@ export type Machine =
   | ManufacturingMachine
   | ManufacturingVariablePowerMachine
   | NodeExtractingMachine
-  | PowerProducingMachine;
+  | PowerProducingMachine
+  | VariablePowerProducingMachine;
 
 /**
  * The type of machine.
@@ -25,6 +26,7 @@ export const enum MachineType {
   MANUFACTURING = "manufacturing",
   MANUFACTURING_VARIABLE_POWER = "manufacturing variable power",
   POWER_PRODUCING = "power producing",
+  VARIABLE_POWER_PRODUCING = "variable power producing",
 }
 
 /**
@@ -87,12 +89,31 @@ export type NodeExtractingMachine = ExtractingMachineBase;
 export type FrackingExtractorMachine = ExtractingMachineBase;
 
 /**
- * A machine that produces power.
+ * The base of all machines that produces power.
  */
-export type PowerProducingMachine = MachineBase & {
-  machineType: MachineType.POWER_PRODUCING;
+export type PowerProducingMachineBase = MachineBase & {
+  machineType:
+    | MachineType.POWER_PRODUCING
+    | MachineType.VARIABLE_POWER_PRODUCING;
   powerProduction: number;
   powerProductionExponent: number;
+};
+
+/**
+ * A machine that produces power.
+ */
+export type PowerProducingMachine = PowerProducingMachineBase & {
+  machineType: MachineType.POWER_PRODUCING;
+};
+
+/**
+ * A machine that produces variable power.
+ */
+export type VariablePowerProducingMachine = PowerProducingMachineBase & {
+  machineType: MachineType.VARIABLE_POWER_PRODUCING;
+  variablePowerProductionConstant: number;
+  variablePowerProductionFactor: number;
+  variablePowerProductionCycleLength: number;
 };
 
 /**
