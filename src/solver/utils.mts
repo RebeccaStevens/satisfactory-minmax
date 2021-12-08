@@ -77,19 +77,26 @@ export function getRecipeProductionRate(
 }
 
 /**
- * Get the net rate of energy usage that the given machine will consume/produce.
+ * Get the net average rate of energy usage that the given machine will consume/produce.
  *
  * A positive return value implies the machine will produced that much power.
  * A negative return value implies the machine will consumed that much power.
  */
 export function getNetEnergyRate(
+  recipe: ImmutableRecipe,
   machine: ImmutableMachine,
   overclock: number,
   perXSeconds = 60
 ) {
+  assert(recipe.canBeProducedIn.has(machine));
+
   const power =
     machine.machineType === MachineType.POWER_PRODUCING
       ? machine.powerProduction * overclock ** (1 / 1.3)
+      : machine.machineType === MachineType.MANUFACTURING_VARIABLE_POWER &&
+        recipe.variablePowerConsumptionConstant > 0
+      ? -recipe.variablePowerConsumptionFactor *
+        overclock ** machine.powerConsumptionExponent
       : -machine.powerConsumption *
         overclock ** machine.powerConsumptionExponent;
 

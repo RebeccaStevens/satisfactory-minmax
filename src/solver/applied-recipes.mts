@@ -100,7 +100,7 @@ function getAppliedSinkRecipes(
   const overclock = 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`sink ${recipe.name} with ${machine.name}`);
-  const netPower = getNetEnergyRate(machine, overclock);
+  const netPower = getNetEnergyRate(recipe, machine, overclock);
 
   const appliedRecipe: AppliedSinkRecipe = {
     ...recipe,
@@ -142,7 +142,7 @@ function getAppliedResourceNodeRecipes(
             overclock * 100
           } on ${purity.id} deposit`
         );
-        const netPower = getNetEnergyRate(machine, overclock);
+        const netPower = getNetEnergyRate(recipe, machine, overclock);
 
         const appliedRecipe: AppliedResourceNodeRecipe = {
           ...recipe,
@@ -179,7 +179,7 @@ function getAppliedWaterPumpRecipes(
 
   const efficiencyMultiplier = 1;
   const id = snakeCase(`extract ${recipe.name} with ${machine.name}`);
-  const netPower = getNetEnergyRate(machine, overclock);
+  const netPower = getNetEnergyRate(recipe, machine, overclock);
 
   const appliedRecipe: AppliedResourceNodeRecipe = {
     ...recipe,
@@ -225,7 +225,7 @@ function getAppliedResourceWellRecipes(
           machine.extractors.size === 1 ? "" : ` with ${extractorName}`;
 
         const id = snakeCase(`extract from ${resourceWell.id}${withExtractor}`);
-        const netPower = getNetEnergyRate(machine, overclock);
+        const netPower = getNetEnergyRate(recipe, machine, overclock);
 
         const appliedRecipe: AppliedResourceWellRecipe = {
           ...recipe,
@@ -256,7 +256,8 @@ function getAppliedPartRecipes(
   const overclock = 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`recipe ${recipe.name} in ${machine.name}`);
-  const netPower = getNetEnergyRate(machine, overclock);
+
+  const netPower = getNetEnergyRate(recipe, machine, overclock);
 
   const appliedRecipe: AppliedPartRecipe = {
     ...recipe,
