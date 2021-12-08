@@ -7,22 +7,12 @@ import type { Item } from "src/data/game/items/types.mjs";
 import { ItemType, TransferType } from "src/data/game/items/types.mjs";
 import { parseRawCollection } from "src/data/game/raw-collection-parser.mjs";
 import { isRawBase } from "src/data/game/raw-types.mjs";
-import type {
-  ItemAmount,
-  PartRecipe,
-  ResourceNodeRecipe,
-  ResourceWellRecipe,
-  SinkRecipe,
-} from "src/data/game/recipes/types.mjs";
+import type { ItemAmount } from "src/data/game/recipes/types.mjs";
 import { RecipeType } from "src/data/game/recipes/types.mjs";
 import { parseBase } from "src/data/game/utils.mjs";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import { getMaxBeltTransferRate } from "src/data/map/utils.mjs";
-import type {
-  ImmutableArray,
-  ImmutableMap,
-  ImmutableSet,
-} from "src/immutable-types.mjs";
+import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
 import { assertNotUndefined, isNotNull, isObject } from "src/utils.mjs";
 
 import type { ImmutableMachine } from "./immutable-types.mjs";
@@ -393,7 +383,7 @@ function parseWellExtractingMachines(
     })
   );
 
-  const machineRecipes = new Set<Omit<ResourceWellRecipe, "canBeProducedIn">>(
+  const machineRecipes = new Set<MachineRecipe>(
     items.map((item) => ({
       id: snakeCase(`recipe frack ${item.name}`),
       name: `${item.name}`,
@@ -482,7 +472,7 @@ function parseWaterPumpMachines(
     })
   );
 
-  const machineRecipes = new Set<Omit<ResourceNodeRecipe, "canBeProducedIn">>([
+  const machineRecipes = new Set<MachineRecipe>([
     {
       id: snakeCase(`recipe water`),
       name: "Water",
@@ -543,12 +533,7 @@ function parsePowerProducingMachines(
 function parsePowerProducingMachine(
   rawData: RawPowerProducingMachine,
   itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
-): [
-  string,
-  PowerProducingMachine & {
-    machineRecipes: ImmutableSet<MachineRecipe>;
-  }
-] {
+): [string, PowerProducingMachine & HasMachineRecipes] {
   const base = parseMachineBase(rawData, MachineType.POWER_PRODUCING);
 
   const fuelAmount = Number.parseFloat(rawData.mFuelLoadAmount);
@@ -565,9 +550,9 @@ function parsePowerProducingMachine(
   assert(Number.isFinite(powerProduction));
   assert(Number.isFinite(powerProductionExponent));
 
-  const machineRecipes = new Set<Omit<PartRecipe, "canBeProducedIn">>(
+  const machineRecipes = new Set<MachineRecipe>(
     rawData.mFuel
-      .map((rawFuel): Omit<PartRecipe, "canBeProducedIn"> | null => {
+      .map((rawFuel): MachineRecipe | null => {
         if (rawFuel.mFuelClass === "FGItemDescriptorBiomass") {
           return null;
         }
@@ -661,18 +646,13 @@ function parseItemSinkMachines(
 function parseItemSinkMachine(
   rawData: RawItemSinkMachine,
   itemsById: ImmutableMap<string, ImmutableItem>
-): [
-  string,
-  ItemSinkMachine & {
-    machineRecipes: Set<Omit<SinkRecipe, "canBeProducedIn">>;
-  }
-] {
+): [string, ItemSinkMachine] {
   const base = parseMachineBase(rawData, MachineType.ITEM_SINK);
 
   const points = itemsById.get("points");
   assert(points !== undefined);
 
-  const machineRecipes = new Set<Omit<SinkRecipe, "canBeProducedIn">>(
+  const machineRecipes = new Set<MachineRecipe>(
     iterate(itemsById.values())
       .filter(
         (item) =>
@@ -703,11 +683,10 @@ function parseItemSinkMachine(
       })
   );
 
-  return [
-    rawData.ClassName,
-    {
-      ...base,
-      machineRecipes,
-    },
-  ];
+  const machine: ItemSinkMachine & HasMachineRecipes = {
+    ...base,
+    machineRecipes,
+  };
+
+  return [rawData.ClassName, machine];
 }

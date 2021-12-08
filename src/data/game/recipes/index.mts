@@ -1,6 +1,6 @@
 export { parseRecipes } from "./parse.mjs";
 
-export type {
+export {
   type ImmutableItemAmount,
   type ImmutableRecipe,
   type ImmutableRecipeBase,
