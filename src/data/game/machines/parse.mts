@@ -127,8 +127,15 @@ function parseMachineBase<Type extends MachineType>(
   const powerConsumptionExponent = Number.parseFloat(
     rawData.mPowerConsumptionExponent
   );
-  const minPotential = Number.parseFloat(rawData.mMinPotential);
+
+  const canChangePotential = rawData.mCanChangePotential === "True";
   const maxPotential = Number.parseFloat(rawData.mMaxPotential);
+  assert(Number.isFinite(maxPotential));
+
+  const minPotential = canChangePotential
+    ? Number.parseFloat(rawData.mMinPotential)
+    : maxPotential;
+
   const maxPotentialIncreasePerCrystal = Number.parseFloat(
     rawData.mMaxPotentialIncreasePerCrystal
   );
@@ -136,10 +143,9 @@ function parseMachineBase<Type extends MachineType>(
   assert(Number.isFinite(powerConsumption));
   assert(Number.isFinite(powerConsumptionExponent));
   assert(Number.isFinite(minPotential));
-  assert(Number.isFinite(maxPotential));
   assert(Number.isFinite(maxPotentialIncreasePerCrystal));
 
-  const maxCrystals = rawData.mCanChangePotential === "True" ? 3 : 0;
+  const maxCrystals = canChangePotential ? 3 : 0;
 
   return {
     ...base,
@@ -147,6 +153,7 @@ function parseMachineBase<Type extends MachineType>(
     powerConsumption,
     powerConsumptionExponent,
     efficiencyMultiplier: 1,
+    canChangePotential,
     minPotential,
     maxPotential,
     maxPotentialIncreasePerCrystal,

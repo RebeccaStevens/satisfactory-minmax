@@ -115,6 +115,10 @@ export function getMaxEffectiveOverclock(
   >,
   productionMultiplier = 1
 ) {
+  if (!machine.canChangePotential) {
+    return 1;
+  }
+
   return iterate(recipe.productAmounts.values())
     .map(({ item, amount }) => {
       const transferTime = 60;

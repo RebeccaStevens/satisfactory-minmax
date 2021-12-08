@@ -36,6 +36,7 @@ export type MachineBase = Ided &
     powerConsumption: number;
     powerConsumptionExponent: number;
     efficiencyMultiplier: number;
+    canChangePotential: boolean;
     minPotential: number;
     maxPotential: number;
     maxPotentialIncreasePerCrystal: number;
