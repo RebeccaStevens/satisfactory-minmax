@@ -127,22 +127,18 @@ export function generateLp(
       }
 
       return iterate(
-        iterate(itemRecipes)
-          .filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE)
-          .map((recipe): [ImmutablePurity, string] => {
-            assert(recipe.recipeType === RecipeType.RESOURCE_NODE);
+        getRecipePurityConstrants(
+          iterate(itemRecipes)
+            .filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE)
+            .map((recipe): [ImmutablePurity, string] => {
+              assert(recipe.recipeType === RecipeType.RESOURCE_NODE);
 
-            const outputItemRecipes = recipesByOutputItem.get(item);
-            assert(outputItemRecipes !== undefined);
+              const outputItemRecipes = recipesByOutputItem.get(item);
+              assert(outputItemRecipes !== undefined);
 
-            return [recipe.purity, recipe.id];
-          })
-          .reduce((carry, [purity, id]) => {
-            const ids = carry.get(purity) ?? [];
-            carry.set(purity, [...ids, id]);
-
-            return carry;
-          }, new Map<ImmutablePurity, string[]>())
+              return [recipe.purity, recipe.id];
+            })
+        )
       ).map(([purity, ids]): [string, string] => {
         const purityCount = nodePurities.amounts.get(purity);
         assert(typeof purityCount === "number");
@@ -155,6 +151,25 @@ export function generateLp(
     })
     .flatten()
     .filter(isNotNull) as IteratorWithOperators<[string, string]>;
+
+  const geyserConstrants = iterate(
+    getRecipePurityConstrants(
+      iterate(recipes.values())
+        .filter((recipe) => recipe.recipeType === RecipeType.GEOTHERMAL_POWER)
+        .map((recipe): [ImmutablePurity, string] => {
+          assert(recipe.recipeType === RecipeType.GEOTHERMAL_POWER);
+          return [recipe.purity, recipe.id];
+        })
+    )
+  ).map(([purity, ids]): [string, string] => {
+    const purityCount = data.geysers.get(purity);
+    assert(typeof purityCount === "number");
+
+    return [
+      snakeCase(`geothermal power on ${purity.id} geyser`),
+      `${ids.join(" + ")} = ${purityCount}`,
+    ];
+  });
 
   const wellExtractionConstrants = iterate(data.resourceWells)
     .map(([item, resourceWellsForItem]) => {
@@ -185,12 +200,13 @@ export function generateLp(
     .map((recipe): string => `${recipe.netPower} ${recipe.id}`)
     .join(" + ");
 
-  const powerConstraint = ["power", `${powerRecipes} >= 0`];
+  const powerConstraint = ["power", `${powerRecipes} >= ${excessPower}`];
 
   const constrants = [
     ...recipeIoConstrants,
     ...nodeExtractionConstrants,
     ...wellExtractionConstrants,
+    ...geyserConstrants,
     powerConstraint,
   ];
 
@@ -211,6 +227,19 @@ export function generateLp(
     .join("\n");
 
   return `Maximize\n  ${lpProblem}\nSubject To\n${lpConstrants}\nBounds\n${lpBounds}\nGeneral\n${lpGenerals}\nEnd`;
+}
+
+function getRecipePurityConstrants(
+  recipesByPurity: Readonly<
+    IteratorWithOperators<readonly [ImmutablePurity, string]>
+  >
+) {
+  return recipesByPurity.reduce((carry, [purity, id]) => {
+    const ids = carry.get(purity) ?? [];
+    carry.set(purity, [...ids, id]);
+
+    return carry;
+  }, new Map<ImmutablePurity, string[]>());
 }
 
 /**
