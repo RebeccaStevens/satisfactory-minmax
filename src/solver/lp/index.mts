@@ -7,7 +7,7 @@ import type {
   ImmutableAppliedRecipe,
   ImmutableData,
 } from "src/data/index.mjs";
-import type { ImmutableMap, ImmutableSet } from "src/immutable-types.mjs";
+import type { ImmutableMap } from "src/immutable-types.mjs";
 import { cacheDir, cachedLpFile } from "src/solver/constants.mjs";
 
 import { generateLp } from "./generate.mjs";
@@ -31,7 +31,8 @@ export async function solveLp(lp: string) {
 export async function loadLp(
   data: ImmutableData,
   recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
-  itemsToMax: ImmutableSet<ImmutableItem>,
+  itemToMax: ImmutableItem,
+  excessPower: number,
   useCache: boolean
 ) {
   if (useCache) {
@@ -46,7 +47,7 @@ export async function loadLp(
   }
 
   console.log("Generating LP");
-  const lp = generateLp(data, recipes, itemsToMax);
+  const lp = generateLp(data, recipes, itemToMax, excessPower);
 
   console.log("Caching LP");
   void fsExtra

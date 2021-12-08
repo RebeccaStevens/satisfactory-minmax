@@ -24,37 +24,29 @@ import { isNotNull } from "src/utils.mjs";
 export function generateLp(
   data: ImmutableData,
   recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
-  itemsToMax: ImmutableSet<ImmutableItem>
+  itemToMax: ImmutableItem,
+  excessPower: number
 ) {
   const recipesByInputItem = getRecipesByInputItem(recipes, data.items);
   const recipesByOutputItem = getRecipesByOutputItem(recipes, data.items);
 
-  const recipesForItemsToMax = iterate(itemsToMax.keys())
-    .map((item) => {
-      const itemInputRecipes = recipesByInputItem.get(item);
-      const itemOutputRecipes = recipesByOutputItem.get(item);
+  const itemToMaxInputRecipes = recipesByInputItem.get(itemToMax);
+  const itemToMaxOutputRecipes = recipesByOutputItem.get(itemToMax);
 
-      assert(itemInputRecipes !== undefined);
-      assert(itemOutputRecipes !== undefined);
-
-      return [...itemInputRecipes, ...itemOutputRecipes];
-    })
-    .flatten()
-    .toSet();
+  const recipesForItemsToMax = new Set([
+    ...(itemToMaxInputRecipes ?? []),
+    ...(itemToMaxOutputRecipes ?? []),
+  ]);
 
   const problem = iterate(recipesForItemsToMax)
     .map((recipe) => {
-      const itemProcutionAmount = iterate(itemsToMax)
-        .map((item) => {
-          const input = recipe.ingredientAmounts.get(item);
-          const output = recipe.productAmounts.get(item);
-          return (output?.amount ?? 0) - (input?.amount ?? 0);
-        })
-        .reduce((sum, amount) => sum + amount, 0);
+      const input = recipe.ingredientAmounts.get(itemToMax);
+      const output = recipe.productAmounts.get(itemToMax);
 
-      return `${itemProcutionAmount * getRecipeProductionRate(recipe)} ${
-        recipe.id
-      }`;
+      return `${
+        (output?.amount ?? 0) -
+        (input?.amount ?? 0) * getRecipeProductionRate(recipe)
+      } ${recipe.id}`;
     })
     .join(" + ");
 

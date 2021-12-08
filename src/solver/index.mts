@@ -6,7 +6,6 @@ import type {
   HighsSolution,
 } from "highs";
 import { iterate } from "iterare";
-import type { Item } from "src/data/game/items/types.mjs";
 import { TransferType } from "src/data/game/items/types.mjs";
 import type {
   ImmutableAppliedRecipe,
@@ -14,7 +13,7 @@ import type {
   ImmutableItem,
 } from "src/data/index.mjs";
 import { loadData } from "src/data/index.mjs";
-import type { ImmutableMap, ImmutableSet } from "src/immutable-types.mjs";
+import type { ImmutableMap } from "src/immutable-types.mjs";
 
 import { getAppliedRecipes } from "./applied-recipes.mjs";
 import { loadLp, solveLp } from "./lp/index.mjs";
@@ -26,34 +25,25 @@ import { getRecipeProductionRate } from "./utils.mjs";
 export async function run() {
   const data = loadData();
 
-  const items = [
-    data.items.get("points"),
-    // data.items.get("item_turbo_motor"),
-    // data.items.get("item_thermal_propulsion_rocket"),
-    // data.items.get("item_supercomputer"),
-    // data.items.get("item_steel_ingot"),
-    // data.items.get("item_caterium_ingot"),
-    // data.items.get("item_iron_ingot"),
-    // data.items.get("item_copper_ingot"),
-    // data.items.get("item_iron_ore"),
-    // data.items.get("item_nitrogen_gas"),
-  ];
+  const itemToMax = data.items.get("points");
+  // const itemToMax = data.items.get("item_turbo_motor"),
+  // const itemToMax = data.items.get("item_thermal_propulsion_rocket"),
+  // const itemToMax = data.items.get("item_supercomputer"),
+  // const itemToMax = data.items.get("item_steel_ingot"),
+  // const itemToMax = data.items.get("item_caterium_ingot"),
+  // const itemToMax = data.items.get("item_iron_ingot"),
+  // const itemToMax = data.items.get("item_copper_ingot"),
+  // const itemToMax = data.items.get("item_iron_ore"),
+  // const itemToMax = data.items.get("item_nitrogen_gas"),
 
-  const itemsToMax = new Set(
-    items.filter((item): item is Item => {
-      assert(item !== undefined);
-      return true;
-    })
-  );
-
-  assert(itemsToMax.size > 0);
+  assert(itemToMax !== undefined);
 
   const appliedRecipes = getAppliedRecipes(data);
 
-  const lp = await loadLp(data, appliedRecipes, itemsToMax, false);
+  const lp = await loadLp(data, appliedRecipes, itemToMax, 0, false);
   const result = await solveLp(lp);
 
-  analyseResult(result, data, appliedRecipes, itemsToMax);
+  analyseResult(result, data, appliedRecipes, itemToMax);
 }
 
 /**
@@ -63,7 +53,7 @@ function analyseResult(
   result: HighsSolution,
   data: ImmutableData,
   appliedRecipes: ImmutableMap<string, ImmutableAppliedRecipe>,
-  itemsToMax: ImmutableSet<ImmutableItem>
+  itemToMax: ImmutableItem
 ) {
   if (result.Status !== "Optimal") {
     throw new Error("Failed to solve LP.");
@@ -107,11 +97,9 @@ function analyseResult(
     const adjustedOutputRate =
       item.transferType === TransferType.PIPE ? outputRate / 1000 : outputRate;
 
-    if (itemsToMax.has(item)) {
+    if (itemToMax === item) {
       console.log(`Max ${item.name} rate:`, adjustedOutputRate);
-    }
-
-    if (adjustedOutputRate > 0 && !itemsToMax.has(item)) {
+    } else if (adjustedOutputRate > 0) {
       console.log(`${item.name} rate:`, adjustedOutputRate);
     }
   }
