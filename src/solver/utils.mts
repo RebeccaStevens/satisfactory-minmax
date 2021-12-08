@@ -6,6 +6,7 @@ import type {
   ImmutableFrackingActivatorMachine,
   ImmutableMachine,
   ImmutablePowerProducingMachine,
+  ImmutableVariablePowerProducingMachine,
 } from "src/data/game/machines/immutable-types.mjs";
 import { MachineType } from "src/data/game/machines/types.mjs";
 import type {
@@ -85,7 +86,8 @@ export function getRecipeProductionRate(
 export function getNetEnergyRate(
   recipe: ImmutableRecipe,
   machine: ImmutableMachine,
-  overclock: number,
+  overclock = 1,
+  powerProductionMultiplier = 1,
   perXSeconds = 60
 ) {
   assert(recipe.canBeProducedIn.has(machine));
@@ -93,6 +95,11 @@ export function getNetEnergyRate(
   const power =
     machine.machineType === MachineType.POWER_PRODUCING
       ? machine.powerProduction * overclock ** (1 / 1.3)
+      : machine.machineType === MachineType.VARIABLE_POWER_PRODUCING
+      ? (machine.variablePowerProductionFactor *
+          powerProductionMultiplier *
+          overclock ** (1 / 1.3)) /
+        recipe.duration
       : machine.machineType === MachineType.MANUFACTURING_VARIABLE_POWER &&
         recipe.variablePowerConsumptionConstant > 0
       ? -recipe.variablePowerConsumptionFactor *
@@ -111,7 +118,9 @@ export function getMaxEffectiveOverclock(
   recipe: ImmutableRecipe,
   machine: Exclude<
     ImmutableMachine,
-    ImmutableFrackingActivatorMachine | ImmutablePowerProducingMachine
+    | ImmutableFrackingActivatorMachine
+    | ImmutablePowerProducingMachine
+    | ImmutableVariablePowerProducingMachine
   >,
   productionMultiplier = 1
 ) {

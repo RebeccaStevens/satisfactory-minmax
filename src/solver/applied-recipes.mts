@@ -6,15 +6,18 @@ import type {
   ImmutableFrackingActivatorMachine,
   ImmutableMachine,
   ImmutableNodeExtractingMachine,
+  ImmutableVariablePowerProducingMachine,
 } from "src/data/game/machines/immutable-types.mjs";
 import type { Machine } from "src/data/game/machines/types.mjs";
 import { MachineType } from "src/data/game/machines/types.mjs";
 import type {
+  ImmutableAppliedGeothermalPowerRecipe,
   ImmutableAppliedPartRecipe,
   ImmutableAppliedRecipe,
   ImmutableAppliedResourceNodeRecipe,
   ImmutableAppliedResourceWellRecipe,
   ImmutableAppliedSinkRecipe,
+  ImmutableGeothermalPowerRecipe,
   ImmutablePartRecipe,
   ImmutableResourceNodeRecipe,
   ImmutableResourceWellRecipe,
@@ -51,6 +54,7 @@ export function getAppliedRecipes(
 
             if (recipe.recipeType === RecipeType.RESOURCE_NODE) {
               assert(machine.machineType === MachineType.EXTRACTING);
+
               if (machine.extractorType === ResourceNodeExtractorType.WATER) {
                 return getAppliedWaterPumpRecipes(
                   recipe,
@@ -61,12 +65,20 @@ export function getAppliedRecipes(
                   data
                 );
               }
+
               return getAppliedResourceNodeRecipes(recipe, machine, data);
             }
 
             if (recipe.recipeType === RecipeType.RESOURCE_WELL) {
               assert(machine.machineType === MachineType.FRACKING_ACTIVATOR);
               return getAppliedResourceWellRecipes(recipe, machine, data);
+            }
+
+            if (recipe.recipeType === RecipeType.GEOTHERMAL_POWER) {
+              assert(
+                machine.machineType === MachineType.VARIABLE_POWER_PRODUCING
+              );
+              return getAppliedGeothermalPowerRecipes(recipe, machine, data);
             }
 
             // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -149,6 +161,55 @@ function getAppliedResourceNodeRecipes(
         const netPower = getNetEnergyRate(recipe, machine, overclock);
 
         const appliedRecipe: ImmutableAppliedResourceNodeRecipe = {
+          ...recipe,
+          id,
+          machine,
+          overclock,
+          purity,
+          efficiencyMultiplier,
+          netPower,
+        };
+
+        return [id, appliedRecipe];
+      }
+    )
+    .toArray();
+}
+
+/**
+ * The all the geothermal power recipes applied to the possible machines.
+ */
+function getAppliedGeothermalPowerRecipes(
+  recipe: ImmutableGeothermalPowerRecipe,
+  machine: ImmutableVariablePowerProducingMachine,
+  data: ImmutableData
+): Array<
+  [
+    ImmutableAppliedGeothermalPowerRecipe["id"],
+    ImmutableAppliedGeothermalPowerRecipe
+  ]
+> {
+  return iterate(data.purities.values())
+    .map(
+      (
+        purity
+      ): [
+        ImmutableAppliedGeothermalPowerRecipe["id"],
+        ImmutableAppliedGeothermalPowerRecipe
+      ] => {
+        const overclock = 1;
+        const efficiencyMultiplier = 1;
+        const id = snakeCase(
+          `${recipe.name} with ${machine.name} on ${purity.id} geyser`
+        );
+        const netPower = getNetEnergyRate(
+          recipe,
+          machine,
+          overclock,
+          purity.efficiencyMultiplier
+        );
+
+        const appliedRecipe: ImmutableAppliedGeothermalPowerRecipe = {
           ...recipe,
           id,
           machine,
