@@ -41,7 +41,7 @@ export type RawManufacturingMachine = RawMachineBase &
  */
 export function isRawManufacturingMachine<T extends RawMachineBase>(
   rawData: T
-): rawData is RawExtractingMachine & T {
+): rawData is RawManufacturingMachine & T {
   return (
     Object.hasOwn(rawData, "mManufacturingSpeed") &&
     typeof rawData.mManufacturingSpeed === "string"
