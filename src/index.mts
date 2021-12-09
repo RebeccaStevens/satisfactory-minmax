@@ -28,4 +28,4 @@ const { appliedRecipes, lpSolution } = await runSolver(
   excessPower
 );
 
-analyseResult(lpSolution, data, appliedRecipes, itemToMax);
+analyseResult(lpSolution, data, appliedRecipes);
