@@ -65,26 +65,53 @@ export type ImmutableAppliedRecipe =
   | ImmutableAppliedGeothermalPowerRecipe
   | ImmutableAppliedPartRecipe;
 
-export type ImmutableAppliedRecipeBase = ImmutableRecipeBase &
-  Readonly<Omit<AppliedRecipeBase, keyof ImmutableRecipeBaseCollections>>;
+export type ImmutableAppliedRecipeBase = Omit<
+  ImmutableRecipeBase,
+  "canBeProducedIn"
+> &
+  Readonly<
+    Omit<
+      AppliedRecipeBase,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
+  >;
 
 export type ImmutableAppliedPartRecipe = ImmutableAppliedRecipeBase &
-  Readonly<Omit<AppliedPartRecipe, keyof ImmutableRecipeBaseCollections>>;
+  Readonly<
+    Omit<
+      AppliedPartRecipe,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
+  >;
 
 export type ImmutableAppliedResourceNodeRecipe = ImmutableAppliedRecipeBase &
   Readonly<
-    Omit<AppliedResourceNodeRecipe, keyof ImmutableRecipeBaseCollections>
+    Omit<
+      AppliedResourceNodeRecipe,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
   >;
 
 export type ImmutableAppliedGeothermalPowerRecipe = ImmutableAppliedRecipeBase &
   Readonly<
-    Omit<AppliedGeothermalPowerRecipe, keyof ImmutableRecipeBaseCollections>
+    Omit<
+      AppliedGeothermalPowerRecipe,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
   >;
 
 export type ImmutableAppliedResourceWellRecipe = ImmutableAppliedRecipeBase &
   Readonly<
-    Omit<AppliedResourceWellRecipe, keyof ImmutableRecipeBaseCollections>
+    Omit<
+      AppliedResourceWellRecipe,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
   >;
 
 export type ImmutableAppliedSinkRecipe = ImmutableAppliedRecipeBase &
-  Readonly<Omit<AppliedSinkRecipe, keyof ImmutableRecipeBaseCollections>>;
+  Readonly<
+    Omit<
+      AppliedSinkRecipe,
+      keyof ImmutableRecipeBaseCollections | "canBeProducedIn"
+    >
+  >;

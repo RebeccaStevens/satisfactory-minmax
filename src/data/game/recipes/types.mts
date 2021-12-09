@@ -96,7 +96,7 @@ export type AppliedRecipe =
 /**
  * The base of all recipes applied to a machine.
  */
-export type AppliedRecipeBase = RecipeBase & {
+export type AppliedRecipeBase = Omit<RecipeBase, "canBeProducedIn"> & {
   recipeType: RecipeType;
   overclock: number;
   machine: ImmutableMachine;

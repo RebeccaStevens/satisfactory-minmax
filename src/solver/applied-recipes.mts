@@ -116,8 +116,10 @@ function getAppliedSinkRecipes(
   const id = snakeCase(`sink ${recipe.name} with ${machine.name}`);
   const netPower = getNetEnergyRate(recipe, machine, overclock);
 
+  const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
   const appliedRecipe: ImmutableAppliedSinkRecipe = {
-    ...recipe,
+    ...appliedRecipeData,
     id,
     machine,
     overclock,
@@ -160,8 +162,10 @@ function getAppliedResourceNodeRecipes(
         );
         const netPower = getNetEnergyRate(recipe, machine, overclock);
 
+        const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
         const appliedRecipe: ImmutableAppliedResourceNodeRecipe = {
-          ...recipe,
+          ...appliedRecipeData,
           id,
           machine,
           overclock,
@@ -209,8 +213,10 @@ function getAppliedGeothermalPowerRecipes(
           purity.efficiencyMultiplier
         );
 
+        const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
         const appliedRecipe: ImmutableAppliedGeothermalPowerRecipe = {
-          ...recipe,
+          ...appliedRecipeData,
           id,
           machine,
           overclock,
@@ -245,8 +251,10 @@ function getAppliedWaterPumpRecipes(
   const id = snakeCase(`extract ${recipe.name} with ${machine.name}`);
   const netPower = getNetEnergyRate(recipe, machine, overclock);
 
+  const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
   const appliedRecipe: ImmutableAppliedResourceNodeRecipe = {
-    ...recipe,
+    ...appliedRecipeData,
     id,
     machine,
     overclock,
@@ -290,8 +298,10 @@ function getAppliedResourceWellRecipes(
         const id = snakeCase(`extract from ${resourceWell.id}${withExtractor}`);
         const netPower = getNetEnergyRate(recipe, machine, overclock);
 
+        const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
         const appliedRecipe: ImmutableAppliedResourceWellRecipe = {
-          ...recipe,
+          ...appliedRecipeData,
           id,
           machine,
           overclock,
@@ -319,8 +329,10 @@ function getAppliedPartRecipes(
 
   const netPower = getNetEnergyRate(recipe, machine, overclock);
 
+  const { canBeProducedIn, ...appliedRecipeData } = recipe;
+
   const appliedRecipe: ImmutableAppliedPartRecipe = {
-    ...recipe,
+    ...appliedRecipeData,
     id,
     machine,
     overclock,
