@@ -133,7 +133,7 @@ export function generateLp(
         )
       ).map(([purity, ids]): [string, string] => {
         const purityCount = nodePurities.amounts.get(purity);
-        assert(typeof purityCount === "number");
+        assert(purityCount !== undefined);
 
         return [
           snakeCase(`extraction of ${purity.id} ${item.name} node`),
@@ -155,7 +155,7 @@ export function generateLp(
     )
   ).map(([purity, ids]): [string, string] => {
     const purityCount = data.geysers.get(purity);
-    assert(typeof purityCount === "number");
+    assert(purityCount !== undefined);
 
     return [
       snakeCase(`geothermal power on ${purity.id} geyser`),
