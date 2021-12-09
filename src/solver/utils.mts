@@ -21,7 +21,7 @@ import type { ImmutableMap } from "src/immutable-types.mjs";
 /**
  * Get all the recipes that have the given item as an input.
  */
-export function getRecipesByInputItem<T extends ImmutableRecipe>(
+export function getRecipesByInputItem<T extends ImmutableAppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
   items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
 ) {
@@ -39,7 +39,7 @@ export function getRecipesByInputItem<T extends ImmutableRecipe>(
 /**
  * Get all the recipes that have the given item as an output.
  */
-export function getRecipesByOutputItem<T extends ImmutableRecipe>(
+export function getRecipesByOutputItem<T extends ImmutableAppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
   items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
 ) {
