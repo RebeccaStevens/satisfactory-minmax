@@ -323,7 +323,7 @@ function getAppliedPartRecipes(
   recipe: ImmutablePartRecipe,
   machine: ImmutableMachine
 ): Array<[ImmutableAppliedPartRecipe["id"], ImmutableAppliedPartRecipe]> {
-  const overclock = 1;
+  const overclock = machine.id === "machine_particle_accelerator" ? 0.5 : 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`recipe ${recipe.name} in ${machine.name}`);
 

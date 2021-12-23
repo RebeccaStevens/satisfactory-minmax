@@ -25,7 +25,8 @@ export function generateLp(
   data: ImmutableData,
   recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
   itemToMax: ImmutableItem,
-  excessPower: number
+  excessPower = 0,
+  excessItems?: ImmutableMap<ImmutableItem, number>
 ) {
   const recipesByInputItem = getRecipesByInputItem(recipes, data.items);
   const recipesByOutputItem = getRecipesByOutputItem(recipes, data.items);
@@ -79,14 +80,16 @@ export function generateLp(
         ]
       );
 
+      const excessNeeded = excessItems?.get(item) ?? 0;
+
       return [
         item.id,
         `${ioRates
           .map(([recipe, rate]) => {
             // eslint-disable-next-line sonarjs/no-nested-template-literals
-            return `${rate} ${recipe.id}`;
+            return `${rate.toFixed(4)} ${recipe.id}`;
           })
-          .join(" + ")} >= 0`,
+          .join(" + ")} >= ${excessNeeded}`,
       ];
     })
     .filter(isNotNull) as IteratorWithOperators<[string, string]>;
@@ -189,17 +192,20 @@ export function generateLp(
     .filter(isNotNull) as IteratorWithOperators<[string, string]>;
 
   const powerRecipes = iterate(recipes.values())
-    .map((recipe): string => `${recipe.netPower} ${recipe.id}`)
+    .map((recipe): string => `${recipe.netPower.toFixed(4)} ${recipe.id}`)
     .join(" + ");
 
-  const powerConstraint = ["power", `${powerRecipes} >= ${excessPower}`];
+  const powerConstrant = [
+    "power",
+    `${powerRecipes} >= ${excessPower.toFixed(4)}`,
+  ];
 
   const constrants = [
     ...recipeIoConstrants,
     ...nodeExtractionConstrants,
     ...wellExtractionConstrants,
     ...geyserConstrants,
-    powerConstraint,
+    powerConstrant,
   ];
 
   const ioBounds = iterate(recipes.values()).map((recipe) => {

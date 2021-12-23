@@ -69,17 +69,50 @@ export function analyseResult(
     .toArray();
 
   const recipeAmounts = iterate(appliedRecipes.values())
+    .filter((recipe) => {
+      const whitelist = new Set([
+        "extract_from_water_well_1",
+        "extract_from_water_well_2",
+        "extract_from_water_well_3",
+        "extract_from_water_well_4",
+        "extract_from_water_well_5",
+        "extract_from_water_well_6",
+        "extract_from_water_well_7",
+        "extract_from_water_well_8",
+        "extract_water_with_water_extractor",
+      ]);
+
+      if (whitelist.has(recipe.id)) {
+        return true;
+      }
+
+      if (recipe.recipeType === RecipeType.PART) {
+        const recipeCount = recipeCounts.get(recipe.id) ?? 0;
+        if (recipeCount > 0) {
+          return true;
+        }
+      }
+
+      return false;
+    })
     .map((recipe) => {
-      if (recipe.recipeType !== RecipeType.PART) {
-        return null;
-      }
+      const recipeCount = recipeCounts.get(recipe.id);
+      assert(recipeCount !== undefined && recipeCount > 0);
 
-      const recipeCount = recipeCounts.get(recipe.id) ?? 0;
-      if (recipeCount === 0) {
-        return null;
-      }
+      const amount = recipeCount.toFixed(4).padStart(9);
+      const name = `${recipe.name} (${recipe.machine.name}, overclocked at ${
+        recipe.overclock * 100
+      }%)`;
+      const inputs = iterate(recipe.ingredientAmounts.keys())
+        .map((item) => item.name)
+        .join(", ");
+      const outputs = iterate(recipe.productAmounts.keys())
+        .map((item) => item.name)
+        .join(", ");
 
-      return `${recipeCount} × ${recipe.id}`;
+      return `${amount} × ${name.padEnd(70)} Inputs: ${inputs.padEnd(
+        80
+      )} Outputs: ${outputs}`;
     })
     .filter(isNotNull)
     .join("\n");

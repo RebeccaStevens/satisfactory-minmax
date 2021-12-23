@@ -32,8 +32,9 @@ export async function loadLp(
   data: ImmutableData,
   recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
   itemToMax: ImmutableItem,
-  excessPower: number,
-  useCache: boolean
+  excessPower = 0,
+  excessItems?: ImmutableMap<ImmutableItem, number>,
+  useCache = false
 ) {
   if (useCache) {
     const cachedLp = await fs
@@ -47,7 +48,7 @@ export async function loadLp(
   }
 
   console.log("Generating LP");
-  const lp = generateLp(data, recipes, itemToMax, excessPower);
+  const lp = generateLp(data, recipes, itemToMax, excessPower, excessItems);
 
   console.log("Caching LP");
   void fsExtra
