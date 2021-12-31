@@ -1,6 +1,6 @@
 import assert from "node:assert";
 
-import { iterate } from "iterare";
+import { pipe, filter, map, reduce } from "iter-ops";
 import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
 import type {
   ImmutableFrackingActivatorMachine,
@@ -25,15 +25,21 @@ export function getRecipesByInputItem<T extends ImmutableAppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
   items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
 ) {
-  return iterate(items.values())
-    .map((item): [ImmutableItem, Set<T>] => {
-      const itemRecipes = iterate(recipes.values())
-        .filter((recipe) => recipe.ingredientAmounts.has(item))
-        .toSet();
+  return new Map(
+    pipe(
+      items.values(),
+      map((item): [ImmutableItem, Set<T>] => {
+        const itemRecipes = new Set(
+          pipe(
+            recipes.values(),
+            filter((recipe) => recipe.ingredientAmounts.has(item))
+          )
+        );
 
-      return [item, itemRecipes];
-    })
-    .toMap();
+        return [item, itemRecipes];
+      })
+    )
+  );
 }
 
 /**
@@ -43,17 +49,23 @@ export function getRecipesByOutputItem<T extends ImmutableAppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
   items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
 ) {
-  return iterate(items.values())
-    .map((item): [ImmutableItem, Set<T>] => {
-      const itemRecipes = iterate(recipes.values())
-        .filter((recipe) => {
-          return recipe.productAmounts.has(item);
-        })
-        .toSet();
+  return new Map(
+    pipe(
+      items.values(),
+      map((item): [ImmutableItem, Set<T>] => {
+        const itemRecipes = new Set(
+          pipe(
+            recipes.values(),
+            filter((recipe) => {
+              return recipe.productAmounts.has(item);
+            })
+          )
+        );
 
-      return [item, itemRecipes];
-    })
-    .toMap();
+        return [item, itemRecipes];
+      })
+    )
+  );
 }
 
 /**
@@ -128,8 +140,9 @@ export function getMaxEffectiveOverclock(
     return 1;
   }
 
-  return iterate(recipe.productAmounts.values())
-    .map(({ item, amount }) => {
+  return pipe(
+    recipe.productAmounts.values(),
+    map(({ item, amount }) => {
       const transferTime = 60;
 
       const maxTransferRate = getMaxTransferRate(
@@ -149,8 +162,9 @@ export function getMaxEffectiveOverclock(
         machine.maxPotential +
           machine.maxCrystals * machine.maxPotentialIncreasePerCrystal
       );
-    })
-    .reduce((carry, current) => (current > carry ? current : carry));
+    }),
+    reduce((carry, current) => (current > carry ? current : carry))
+  ).first!;
 }
 
 /**
@@ -162,37 +176,42 @@ export function getMaxEffectiveWellOverclock(
   machine: ImmutableFrackingActivatorMachine,
   resourceWell: ImmutableResourceWell
 ) {
-  return iterate(resourceWell.satellites)
-    .map((satelliteTypes) =>
-      iterate(satelliteTypes.amounts)
-        .map(([purity, satilitesOfPurityAmount]) => {
-          const resourceAmounts = recipe.productAmounts.get(
-            satelliteTypes.resource
-          );
-          assert(resourceAmounts !== undefined);
+  return pipe(
+    resourceWell.satellites,
+    map(
+      (satelliteTypes) =>
+        pipe(
+          satelliteTypes.amounts,
+          map(([purity, satilitesOfPurityAmount]) => {
+            const resourceAmounts = recipe.productAmounts.get(
+              satelliteTypes.resource
+            );
+            assert(resourceAmounts !== undefined);
 
-          const transferTime = 60;
+            const transferTime = 60;
 
-          const maxTransferRate = getMaxTransferRate(
-            satelliteTypes.resource.transferType,
-            transferTime
-          );
+            const maxTransferRate = getMaxTransferRate(
+              satelliteTypes.resource.transferType,
+              transferTime
+            );
 
-          const transferRate =
-            (satilitesOfPurityAmount *
-              purity.efficiencyMultiplier *
-              resourceAmounts.amount *
-              transferTime *
-              machine.efficiencyMultiplier) /
-            recipe.duration;
+            const transferRate =
+              (satilitesOfPurityAmount *
+                purity.efficiencyMultiplier *
+                resourceAmounts.amount *
+                transferTime *
+                machine.efficiencyMultiplier) /
+              recipe.duration;
 
-          return Math.min(
-            maxTransferRate / transferRate,
-            machine.maxPotential +
-              machine.maxCrystals * machine.maxPotentialIncreasePerCrystal
-          );
-        })
-        .reduce((carry, current) => (current > carry ? current : carry))
-    )
-    .reduce((carry, current) => (current > carry ? current : carry));
+            return Math.min(
+              maxTransferRate / transferRate,
+              machine.maxPotential +
+                machine.maxCrystals * machine.maxPotentialIncreasePerCrystal
+            );
+          }),
+          reduce((carry, current) => (current > carry ? current : carry))
+        ).first!
+    ),
+    reduce((carry, current) => (current > carry ? current : carry))
+  ).first!;
 }

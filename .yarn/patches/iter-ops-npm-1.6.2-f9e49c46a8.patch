@@ -1,0 +1,22 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 74c1470073da6a6bde3eafe5aa43f0df3c2fb09b..a811521f6cf4e973aa7a234ea925bb8c09d0ab3a 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -555,6 +555,8 @@ declare function empty<T>(): Operation<T, T>;
+  */
+ declare function every<T>(cb: (value: T, index: number, state: IterationState) => boolean | Promise<boolean>): Operation<T, boolean>;
+ 
++declare function filter<T, S extends T>(cb: (value: T, index: number, state: IterationState) => value is S): Operation<T, S>;
++
+ /**
+  * Standard `Array.filter` logic for the iterable, extended with iteration state + async.
+  *
+@@ -817,7 +819,7 @@ declare function page<T>(size: number): Operation<T, T[]>;
+  *
+  * @category Sync+Async
+  */
+-declare function reduce<T>(cb: (previousValue: T, currentValue: T, index: number, state: IterationState) => T, initialValue?: T): Operation<T, T>;
++declare function declare function reduce<T, R = T>(cb: (previousValue: R, currentValue: T, index: number, state: IterationState) => R, initialValue?: R): Operation<T, R>;
+ 
+ /**
+  * Repeats every value specified number of times.

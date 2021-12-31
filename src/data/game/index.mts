@@ -1,14 +1,13 @@
 import assert from "node:assert";
 
 import gameJsonData from "data/game-data.json" assert { type: "json" };
-import { iterate } from "iterare";
-import type { IteratorWithOperators } from "iterare/lib/iterate";
+import { pipe, concat, filter, map, spread } from "iter-ops";
 import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
 import { isObject } from "src/utils.mjs";
 
 import type { ImmutableItem } from "./items/index.mjs";
 import { getNonPhysicalItems, parseItems } from "./items/index.mjs";
-import type { ImmutableMachine, HasMachineRecipes } from "./machines/index.mjs";
+import type { ImmutableMachine } from "./machines/index.mjs";
 import { hasMachineRecipes, parseMachines } from "./machines/index.mjs";
 import type { ImmutableRecipe } from "./recipes/index.mjs";
 import { parseRecipes } from "./recipes/index.mjs";
@@ -41,9 +40,13 @@ export function loadItems(
 
   const nonPhysicalItems = getNonPhysicalItems();
 
-  const byId = iterate([...byInternalClassName.values(), ...nonPhysicalItems])
-    .map((item): [string, ImmutableItem] => [item.id, item])
-    .toMap();
+  const byId = new Map(
+    pipe(
+      [],
+      concat(byInternalClassName.values(), nonPhysicalItems),
+      map((item): [string, ImmutableItem] => [item.id, item])
+    )
+  );
 
   return {
     byInternalClassName,
@@ -62,9 +65,12 @@ export function loadMachines(
   }>
 ) {
   const byInternalClassName = parseMachines(rawGameDataByNativeClass, items);
-  const byId = iterate(byInternalClassName.values())
-    .map((machine): [string, ImmutableMachine] => [machine.id, machine])
-    .toMap();
+  const byId = new Map(
+    pipe(
+      byInternalClassName.values(),
+      map((machine): [string, ImmutableMachine] => [machine.id, machine])
+    )
+  );
 
   return {
     byInternalClassName,
@@ -86,22 +92,21 @@ export function loadRecipes(
     machinesByInternalClassName
   );
 
-  const machineRecipes = (
-    iterate(machinesByInternalClassName.values()).filter(
-      hasMachineRecipes
-    ) as IteratorWithOperators<HasMachineRecipes & ImmutableMachine>
-  )
-    .map((machineWithRecipes) => {
+  const machineRecipes = pipe(
+    machinesByInternalClassName.values(),
+    filter(hasMachineRecipes),
+    map((machineWithRecipes) => {
       return [...machineWithRecipes.machineRecipes.values()].map(
         (recipe): [ImmutableRecipe["id"], ImmutableRecipe] => [
           recipe.id,
           { ...recipe, canBeProducedIn: new Set([machineWithRecipes]) },
         ]
       );
-    })
-    .flatten();
+    }),
+    spread()
+  );
 
-  return new Map([...baseRecipes, ...machineRecipes]);
+  return new Map(pipe([], concat(baseRecipes, machineRecipes)));
 }
 
 export {

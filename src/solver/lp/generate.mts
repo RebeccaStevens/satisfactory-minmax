@@ -1,8 +1,7 @@
 import assert from "node:assert";
 
 import { snakeCase } from "change-case";
-import { iterate } from "iterare";
-import type { IteratorWithOperators } from "iterare/lib/iterate";
+import { pipe, filter, map, spread, reduce, concat } from "iter-ops";
 import { RecipeType } from "src/data/index.mjs";
 import type {
   ImmutableItem,
@@ -39,20 +38,27 @@ export function generateLp(
     ...(itemToMaxOutputRecipes ?? []),
   ]);
 
-  const problem = iterate(recipesForItemsToMax)
-    .map((recipe) => {
-      const input = recipe.ingredientAmounts.get(itemToMax);
-      const output = recipe.productAmounts.get(itemToMax);
+  const problem = [
+    ...pipe(
+      recipesForItemsToMax,
+      map((recipe) => {
+        const input = recipe.ingredientAmounts.get(itemToMax);
+        const output = recipe.productAmounts.get(itemToMax);
 
-      return `${
-        (output?.amount ?? 0) -
-        (input?.amount ?? 0) * getRecipeProductionRate(recipe)
-      } ${recipe.id}`;
-    })
-    .join(" + ");
+        return `${
+          (output?.amount ?? 0) -
+          (input?.amount ?? 0) * getRecipeProductionRate(recipe)
+        } ${recipe.id}`;
+      })
+    ),
+  ].join(" + ");
 
-  const recipeIoConstrants = iterate(data.items.values())
-    .map((item): [string, string] | null => {
+  type Constrant = readonly [string, string];
+  type Constrants = Readonly<Iterable<Constrant>>;
+
+  const recipeIoConstrants: Constrants = pipe(
+    data.items.values(),
+    map((item): Constrant | null => {
       const [inputAmounts, outputAmounts] =
         getItemIoAmountForItemByAppliedRecipe(
           item,
@@ -72,60 +78,68 @@ export function generateLp(
         return null;
       }
 
-      const ioRates = iterate(itemRecipes).map(
-        (recipe): [ImmutableAppliedRecipe, number] => [
+      const ioRates = pipe(
+        itemRecipes,
+        map((recipe): [ImmutableAppliedRecipe, number] => [
           recipe,
           ((outputAmounts.get(recipe) ?? 0) - (inputAmounts.get(recipe) ?? 0)) *
             getRecipeProductionRate(recipe),
-        ]
+        ])
       );
 
       const excessNeeded = excessItems?.get(item) ?? 0;
 
       return [
         item.id,
-        `${ioRates
-          .map(([recipe, rate]) => {
-            // eslint-disable-next-line sonarjs/no-nested-template-literals
-            return `${rate.toFixed(4)} ${recipe.id}`;
-          })
-          .join(" + ")} >= ${excessNeeded}`,
+        `${[
+          ...pipe(
+            ioRates,
+            map(([recipe, rate]) => {
+              // eslint-disable-next-line sonarjs/no-nested-template-literals
+              return `${rate.toFixed(4)} ${recipe.id}`;
+            })
+          ),
+        ].join(" + ")} >= ${excessNeeded}`,
       ];
-    })
-    .filter(isNotNull) as IteratorWithOperators<[string, string]>;
+    }),
+    filter(isNotNull)
+  );
 
-  const extractionRecipeIds = iterate([
-    ...data.resourceNodes.keys(),
-    ...data.resourceWells.keys(),
-  ])
-    .map((resource) => {
-      const itemRecipes = recipesByOutputItem.get(resource);
-      if (itemRecipes === undefined || itemRecipes.size === 0) {
-        return null;
-      }
+  const extractionRecipeIds = [
+    ...pipe(
+      [],
+      concat(data.resourceNodes.keys(), data.resourceWells.keys()),
+      map((resource) => {
+        const itemRecipes = recipesByOutputItem.get(resource);
+        if (itemRecipes === undefined || itemRecipes.size === 0) {
+          return null;
+        }
 
-      return iterate(
-        iterate(itemRecipes)
-          .filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE)
-          .map((recipe) => recipe.id)
-      );
-    })
-    .flatten()
-    .filter(isNotNull)
-    .toArray();
+        return pipe(
+          itemRecipes,
+          filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE),
+          map((recipe) => recipe.id)
+        );
+      }),
+      spread(),
+      filter(isNotNull)
+    ),
+  ];
 
-  const nodeExtractionConstrants = iterate(data.resourceNodes)
-    .map(([item, nodePurities]) => {
+  const nodeExtractionConstrants: Constrants = pipe(
+    data.resourceNodes,
+    map(([item, nodePurities]) => {
       const itemRecipes = recipesByOutputItem.get(item);
       if (itemRecipes === undefined || itemRecipes.size === 0) {
         return null;
       }
 
-      return iterate(
+      return pipe(
         getRecipePurityConstrants(
-          iterate(itemRecipes)
-            .filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE)
-            .map((recipe): [ImmutablePurity, string] => {
+          pipe(
+            itemRecipes,
+            filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE),
+            map((recipe): [ImmutablePurity, string] => {
               assert(recipe.recipeType === RecipeType.RESOURCE_NODE);
 
               const outputItemRecipes = recipesByOutputItem.get(item);
@@ -133,111 +147,141 @@ export function generateLp(
 
               return [recipe.purity, recipe.id];
             })
-        )
-      ).map(([purity, ids]): [string, string] => {
-        const purityCount = nodePurities.amounts.get(purity);
-        assert(purityCount !== undefined);
+          )
+        ),
+        map(([purity, ids]): [string, string] => {
+          const purityCount = nodePurities.amounts.get(purity);
+          assert(purityCount !== undefined);
 
-        return [
-          snakeCase(`extraction of ${purity.id} ${item.name} node`),
-          `${ids.join(" + ")} = ${purityCount}`,
-        ];
-      });
-    })
-    .flatten()
-    .filter(isNotNull) as IteratorWithOperators<[string, string]>;
+          return [
+            snakeCase(`extraction of ${purity.id} ${item.name} node`),
+            `${ids.join(" + ")} = ${purityCount}`,
+          ];
+        })
+      );
+    }),
+    spread(),
+    filter(isNotNull)
+  );
 
-  const geyserConstrants = iterate(
+  const geyserConstrants: Constrants = pipe(
     getRecipePurityConstrants(
-      iterate(recipes.values())
-        .filter((recipe) => recipe.recipeType === RecipeType.GEOTHERMAL_POWER)
-        .map((recipe): [ImmutablePurity, string] => {
+      pipe(
+        recipes.values(),
+        filter((recipe) => recipe.recipeType === RecipeType.GEOTHERMAL_POWER),
+        map((recipe): [ImmutablePurity, string] => {
           assert(recipe.recipeType === RecipeType.GEOTHERMAL_POWER);
           return [recipe.purity, recipe.id];
         })
-    )
-  ).map(([purity, ids]): [string, string] => {
-    const purityCount = data.geysers.get(purity);
-    assert(purityCount !== undefined);
+      )
+    ),
+    map(([purity, ids]): [string, string] => {
+      const purityCount = data.geysers.get(purity);
+      assert(purityCount !== undefined);
 
-    return [
-      snakeCase(`geothermal power on ${purity.id} geyser`),
-      `${ids.join(" + ")} = ${purityCount}`,
-    ];
-  });
+      return [
+        snakeCase(`geothermal power on ${purity.id} geyser`),
+        `${ids.join(" + ")} = ${purityCount}`,
+      ];
+    })
+  );
 
-  const wellExtractionConstrants = iterate(data.resourceWells)
-    .map(([item, resourceWellsForItem]) => {
+  const wellExtractionConstrants: Constrants = pipe(
+    data.resourceWells,
+    map(([item, resourceWellsForItem]) => {
       const itemRecipes = recipesByOutputItem.get(item);
       if (itemRecipes === undefined || itemRecipes.size === 0) {
         return null;
       }
 
-      return iterate(resourceWellsForItem).map((well) => {
-        const recipe = iterate(itemRecipes).find(
-          (r) =>
-            r.recipeType === RecipeType.RESOURCE_WELL &&
-            r.resourceWell.id === well.id
-        );
-        assert(recipe !== undefined);
-        assert(recipe.recipeType === RecipeType.RESOURCE_WELL);
+      return pipe(
+        resourceWellsForItem,
+        map((well): Constrant => {
+          const recipe = [...itemRecipes].find(
+            (r) =>
+              r.recipeType === RecipeType.RESOURCE_WELL &&
+              r.resourceWell.id === well.id
+          );
+          assert(recipe !== undefined);
+          assert(recipe.recipeType === RecipeType.RESOURCE_WELL);
 
-        const outputItemRecipes = recipesByOutputItem.get(item);
-        assert(outputItemRecipes !== undefined);
+          const outputItemRecipes = recipesByOutputItem.get(item);
+          assert(outputItemRecipes !== undefined);
 
-        return [snakeCase(`extraction of ${well.name}`), `${recipe.id} = 1`];
-      });
-    })
-    .flatten()
-    .filter(isNotNull) as IteratorWithOperators<[string, string]>;
+          return [snakeCase(`extraction of ${well.name}`), `${recipe.id} = 1`];
+        })
+      );
+    }),
+    spread(),
+    filter(isNotNull)
+  );
 
-  const powerRecipes = iterate(recipes.values())
-    .map((recipe): string => `${recipe.netPower.toFixed(4)} ${recipe.id}`)
-    .join(" + ");
+  const powerRecipes = [
+    ...pipe(
+      recipes.values(),
+      map((recipe): string => `${recipe.netPower.toFixed(4)} ${recipe.id}`)
+    ),
+  ].join(" + ");
 
-  const powerConstrant = [
+  const powerConstrant: Constrant = [
     "power",
     `${powerRecipes} >= ${excessPower.toFixed(4)}`,
   ];
 
-  const constrants = [
-    ...recipeIoConstrants,
-    ...nodeExtractionConstrants,
-    ...wellExtractionConstrants,
-    ...geyserConstrants,
-    powerConstrant,
-  ];
+  const constrants: Constrants = pipe(
+    [],
+    concat(
+      recipeIoConstrants,
+      nodeExtractionConstrants,
+      wellExtractionConstrants,
+      geyserConstrants,
+      [powerConstrant]
+    )
+  );
 
-  const ioBounds = iterate(recipes.values()).map((recipe) => {
-    return `0 <= ${recipe.id}`;
-  });
+  const ioBounds = pipe(
+    recipes.values(),
+    map((recipe) => {
+      return `0 <= ${recipe.id}`;
+    })
+  );
 
   const bounds = [...ioBounds, "0 <= power"];
 
   const lpProblem = `desired: ${problem}`;
-  const lpConstrants = constrants
-    .map(([id, constant]) => `  ${id}: ${constant}`)
-    .join("\n");
+  const lpConstrants = [
+    ...pipe(
+      constrants,
+      map(([id, constant]) => `  ${id}: ${constant}`)
+    ),
+  ].join("\n");
   const lpBounds = bounds.map((bound) => `  ${bound}`).join("\n");
 
-  const lpGenerals = extractionRecipeIds
-    .map((general) => `  ${general}`)
-    .join("\n");
+  const lpGenerals = [
+    ...pipe(
+      extractionRecipeIds,
+      map((general) => `  ${general}`)
+    ),
+  ].join("\n");
 
   return `Maximize\n  ${lpProblem}\nSubject To\n${lpConstrants}\nBounds\n${lpBounds}\nGeneral\n${lpGenerals}\nEnd`;
 }
 
 function getRecipePurityConstrants(
-  recipesByPurity: Readonly<
-    IteratorWithOperators<readonly [ImmutablePurity, string]>
-  >
+  recipesByPurity: Readonly<Iterable<readonly [ImmutablePurity, string]>>
 ) {
-  return recipesByPurity.reduce((carry, [purity, id]) => {
-    const ids = carry.get(purity) ?? [];
-    carry.set(purity, [...ids, id]);
+  return pipe<
+    readonly [ImmutablePurity, string],
+    Map<Readonly<ImmutablePurity>, string[]>
+  >(
+    recipesByPurity,
+    reduce((carry, [purity, id]) => {
+      const ids = carry.get(purity) ?? [];
+      carry.set(purity, [...ids, id]);
 
-    return carry;
-  }, new Map<ImmutablePurity, string[]>());
+      return carry;
+    }, new Map<ImmutablePurity, string[]>())
+  ).first!;
 }
 
 /**
@@ -279,13 +323,16 @@ function getIngredientAmountsForItemByRecipe(
   itemAppliedRecipes: ImmutableSet<ImmutableAppliedRecipe>,
   item: ImmutableItem
 ) {
-  return iterate(itemAppliedRecipes)
-    .map((recipe): [ImmutableAppliedRecipe, number] => {
-      const itemAmount = recipe.ingredientAmounts.get(item);
-      assert(itemAmount !== undefined);
-      return [recipe, itemAmount.amount];
-    })
-    .toMap();
+  return new Map(
+    pipe(
+      itemAppliedRecipes,
+      map((recipe): [ImmutableAppliedRecipe, number] => {
+        const itemAmount = recipe.ingredientAmounts.get(item);
+        assert(itemAmount !== undefined);
+        return [recipe, itemAmount.amount];
+      })
+    )
+  );
 }
 
 /**
@@ -295,11 +342,14 @@ function getProductAmountsForItemByRecipe(
   itemAppliedRecipes: ImmutableSet<ImmutableAppliedRecipe>,
   item: ImmutableItem
 ) {
-  return iterate(itemAppliedRecipes)
-    .map((recipe): [ImmutableAppliedRecipe, number] => {
-      const itemAmount = recipe.productAmounts.get(item);
-      assert(itemAmount !== undefined);
-      return [recipe, itemAmount.amount];
-    })
-    .toMap();
+  return new Map(
+    pipe(
+      itemAppliedRecipes,
+      map((recipe): [ImmutableAppliedRecipe, number] => {
+        const itemAmount = recipe.productAmounts.get(item);
+        assert(itemAmount !== undefined);
+        return [recipe, itemAmount.amount];
+      })
+    )
+  );
 }

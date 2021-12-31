@@ -1,6 +1,5 @@
 import assert from "node:assert";
 
-import { iterate } from "iterare";
 import { analyseResult } from "src/analyse/index.mjs";
 import type { ImmutableItem } from "src/data/index.mjs";
 import { loadData } from "src/data/index.mjs";
@@ -25,7 +24,7 @@ assert(itemToMax !== undefined);
 const excessPower = 42_000;
 const excessItems = new Map([[data.items.get("item_packaged_turbofuel"), 45]]);
 
-for (const [item] of iterate(excessItems)) {
+for (const [item] of excessItems) {
   assert(item !== undefined);
 }
 

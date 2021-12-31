@@ -1,7 +1,6 @@
 import assert from "node:assert";
 
-import { iterate } from "iterare";
-import type { IteratorWithOperators } from "iterare/lib/iterate";
+import { pipe, filter, map, spread, every } from "iter-ops";
 import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
 import { ItemType } from "src/data/game/items/types.mjs";
 import type { ImmutableMachine } from "src/data/game/machines/immutable-types.mjs";
@@ -67,26 +66,26 @@ function parseRecipe(
   const rawIngredients = parseRawCollection(rawData.mIngredients);
   assert(rawIngredients instanceof Set);
 
-  const statedIngredientAmounts = (
-    iterate(rawIngredients)
-      .map(parseRawIo)
-      .filter(isNotNull) as IteratorWithOperators<[ImmutableItem, ItemAmount]>
-  ).toMap();
+  const statedIngredientAmounts = new Map(
+    pipe(rawIngredients, map(parseRawIo), filter(isNotNull))
+  );
 
   const rawProducts = parseRawCollection(rawData.mProduct);
   assert(rawProducts instanceof Set);
 
-  const productAmounts = (
-    iterate(rawProducts)
-      .map(parseRawIo)
-      .filter(isNotNull) as IteratorWithOperators<[ImmutableItem, ItemAmount]>
-  ).toMap();
-
-  const isResourceRecipe = iterate(statedIngredientAmounts).every(
-    ([item, { amount }]) =>
-      item.itemType === ItemType.RESOURCE &&
-      productAmounts.get(item)?.amount === amount
+  const productAmounts = new Map(
+    pipe(rawProducts, map(parseRawIo), filter(isNotNull))
   );
+
+  const isResourceRecipe =
+    pipe(
+      statedIngredientAmounts,
+      every(
+        ([item, { amount }]) =>
+          item.itemType === ItemType.RESOURCE &&
+          productAmounts.get(item)?.amount === amount
+      )
+    ).first === true;
 
   const ingredientAmounts = isResourceRecipe
     ? new Map<ImmutableItem, ItemAmount>()
@@ -99,49 +98,54 @@ function parseRecipe(
   assert(rawProducedIn instanceof Set);
 
   const extractingMachines = isResourceRecipe
-    ? iterate(machinesByInternalClassName.values()).filter(
-        (machine) => machine.machineType === MachineType.EXTRACTING
+    ? pipe(
+        machinesByInternalClassName.values(),
+        filter((machine) => machine.machineType === MachineType.EXTRACTING)
       )
     : null;
 
-  const canBeProducedIn = iterate(rawProducedIn)
-    // TODO: The solver be what filters out manual machines.
-    .filter(filterOutManualMachines)
-    .map((machineInternalClassName) => {
-      assert(typeof machineInternalClassName === "string");
+  const canBeProducedIn = new Set(
+    pipe(
+      rawProducedIn,
+      // TODO: The solver should be what filters out manual machines.
+      filter(filterOutManualMachines),
+      map((machineInternalClassName) => {
+        assert(typeof machineInternalClassName === "string");
 
-      if (isResourceRecipe) {
-        const resource = [...productAmounts.keys()][0];
-        assert(resource?.itemType === ItemType.RESOURCE);
+        if (isResourceRecipe) {
+          const resource = [...productAmounts.keys()][0];
+          assert(resource?.itemType === ItemType.RESOURCE);
 
-        const extractorTypeNeeded = getResourceNodeExtractorType(resource);
+          const extractorTypeNeeded = getResourceNodeExtractorType(resource);
 
-        if (extractorTypeNeeded === null) {
-          return [];
+          if (extractorTypeNeeded === null) {
+            return [];
+          }
+
+          assert(extractingMachines !== null);
+          return pipe(
+            extractingMachines,
+            filter(
+              (machine) =>
+                machine.machineType === MachineType.EXTRACTING &&
+                machine.extractorType === extractorTypeNeeded
+            )
+          );
         }
 
-        assert(extractingMachines !== null);
-        return extractingMachines
-          .filter(
-            (machine) =>
-              machine.machineType === MachineType.EXTRACTING &&
-              machine.extractorType === extractorTypeNeeded
-          )
-          .toArray();
-      }
+        const simpleMachineInternalClassName = getSimpleInternalClassName(
+          machineInternalClassName
+        );
+        const machine = machinesByInternalClassName.get(
+          simpleMachineInternalClassName
+        );
+        assert(machine !== undefined);
 
-      const simpleMachineInternalClassName = getSimpleInternalClassName(
-        machineInternalClassName
-      );
-      const machine = machinesByInternalClassName.get(
-        simpleMachineInternalClassName
-      );
-      assert(machine !== undefined);
-
-      return [machine];
-    })
-    .flatten()
-    .toSet();
+        return [machine];
+      }),
+      spread()
+    )
+  );
 
   const duration = Number.parseFloat(rawData.mManufactoringDuration);
   const variablePowerConsumptionConstant = Number.parseFloat(
@@ -165,12 +169,14 @@ function parseRecipe(
 
   const recipeType =
     productAmounts.size > 0 &&
-    iterate(ingredientAmounts.keys()).every(
-      (item) => item.itemType === ItemType.NON_PHYSICAL
-    ) &&
-    iterate(productAmounts.keys()).every(
-      (item) => item.itemType === ItemType.RESOURCE
-    )
+    pipe(
+      ingredientAmounts.keys(),
+      every((item) => item.itemType === ItemType.NON_PHYSICAL)
+    ).first === true &&
+    pipe(
+      productAmounts.keys(),
+      every((item) => item.itemType === ItemType.RESOURCE)
+    ).first === true
       ? rawData.ClassName === "Build_FrackingSmasher_C"
         ? RecipeType.RESOURCE_WELL
         : RecipeType.RESOURCE_NODE

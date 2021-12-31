@@ -4041,10 +4041,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iterare@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "iterare@npm:1.2.1"
-  checksum: 70bc80038e3718aa9072bc63b3a0135166d7120bde46bfcaf80a88d11005dcef1b2d69cd353849f87a3f58ba8f546a8c6e6983408236ff01fa50b52339ee5223
+"iter-ops@npm:1.6.2":
+  version: 1.6.2
+  resolution: "iter-ops@npm:1.6.2"
+  checksum: 0cf9f216f3e36cba5b20b7495dd747077974b6e9bb881c843fc4b0943958dd75e0734b696aa5faeb79f19a673f745cc2c76fcfc83ba84e21d6b61e0f12c08da9
+  languageName: node
+  linkType: hard
+
+"iter-ops@patch:iter-ops@npm%3A1.6.2#./.yarn/patches/iter-ops-npm-1.6.2-f9e49c46a8.patch::locator=satisfactory-minmax%40workspace%3A.":
+  version: 1.6.2
+  resolution: "iter-ops@patch:iter-ops@npm%3A1.6.2#./.yarn/patches/iter-ops-npm-1.6.2-f9e49c46a8.patch::version=1.6.2&hash=af3e67&locator=satisfactory-minmax%40workspace%3A."
+  checksum: 147c22c015f7237101715184646530242ee899758d34cb82f7c5d308a96c3a3e349db6544ac59cbc57af4a024452345c68da1e66b7fe50e8c5c535f0bf85cf27
   languageName: node
   linkType: hard
 
@@ -5423,7 +5430,7 @@ __metadata:
     fs-extra: ^10.1.0
     highs: ^0.7.2
     husky: ^8.0.1
-    iterare: ^1.2.1
+    iter-ops: ^1.6.2
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
     marked: ^4.1.0

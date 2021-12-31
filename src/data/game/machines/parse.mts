@@ -1,7 +1,7 @@
 import assert from "node:assert";
 
 import { snakeCase } from "change-case";
-import { iterate } from "iterare";
+import { pipe, filter, map } from "iter-ops";
 import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
 import type { Item } from "src/data/game/items/types.mjs";
 import { ItemType, TransferType } from "src/data/game/items/types.mjs";
@@ -413,25 +413,28 @@ function parseWellExtractingMachines(
     }))
   );
 
-  return iterate(activatorMachines)
-    .map(
-      ([activatorClassName, activatingMachine]): [
-        string,
-        FrackingActivatorMachine & HasMachineRecipes
-      ] => {
-        const extractors = new Set(extractorMachines.values());
+  return [
+    ...pipe(
+      activatorMachines,
+      map(
+        ([activatorClassName, activatingMachine]): [
+          string,
+          FrackingActivatorMachine & HasMachineRecipes
+        ] => {
+          const extractors = new Set(extractorMachines.values());
 
-        return [
-          activatorClassName,
-          {
-            ...activatingMachine,
-            machineRecipes,
-            extractors,
-          },
-        ];
-      }
-    )
-    .toArray();
+          return [
+            activatorClassName,
+            {
+              ...activatingMachine,
+              machineRecipes,
+              extractors,
+            },
+          ];
+        }
+      )
+    ),
+  ];
 }
 
 /**
@@ -502,17 +505,23 @@ function parseWaterPumpMachines(
     },
   ]);
 
-  return iterate(machines)
-    .map(
-      ([id, machine]): [string, NodeExtractingMachine & HasMachineRecipes] => [
-        id,
-        {
-          ...machine,
-          machineRecipes,
-        },
-      ]
-    )
-    .toArray();
+  return [
+    ...pipe(
+      machines,
+      map(
+        ([id, machine]): [
+          string,
+          NodeExtractingMachine & HasMachineRecipes
+        ] => [
+          id,
+          {
+            ...machine,
+            machineRecipes,
+          },
+        ]
+      )
+    ),
+  ];
 }
 
 /**
@@ -599,7 +608,7 @@ function parsePowerProducingMachine(
   assert(Number.isFinite(fuelAmount));
   assert(Number.isFinite(supplementalLoadAmount));
 
-  const machineRecipes = new Set<MachineRecipe>(
+  const machineRecipes = new Set(
     rawData.mFuel
       .map((rawFuel): MachineRecipe | null => {
         if (rawFuel.mFuelClass === "FGItemDescriptorBiomass") {
@@ -766,15 +775,16 @@ function parseItemSinkMachine(
   assert(points !== undefined);
 
   const machineRecipes = new Set<MachineRecipe>(
-    iterate(itemsById.values())
-      .filter(
+    pipe(
+      itemsById.values(),
+      filter(
         (item) =>
           item.itemType !== ItemType.NON_PHYSICAL &&
           item.transferType === TransferType.BELT &&
           item.sinkable &&
           item.sinkPoints > 0
-      )
-      .map((item) => {
+      ),
+      map((item) => {
         assert(item.itemType !== ItemType.NON_PHYSICAL);
 
         const duration = 1;
@@ -794,6 +804,7 @@ function parseItemSinkMachine(
           variablePowerConsumptionFactor: 1,
         };
       })
+    )
   );
 
   const machine: ItemSinkMachine & HasMachineRecipes = {

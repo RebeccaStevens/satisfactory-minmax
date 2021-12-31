@@ -2,7 +2,7 @@ import assert from "node:assert";
 
 import { snakeCase } from "change-case";
 import mapJsonData from "data/map.json" assert { type: "json" };
-import { iterate } from "iterare";
+import { pipe, reduce } from "iter-ops";
 import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
 import type { ResourceItem } from "src/data/game/items/types.mjs";
 import { ItemType } from "src/data/game/items/types.mjs";
@@ -110,16 +110,22 @@ function parseResourceWells(
               },
             ]);
 
-            const wellSizeMultiplier = iterate(satellites).reduce(
-              (sizeSum, satellitesOfPurity) =>
-                sizeSum +
-                iterate(satellitesOfPurity.amounts).reduce(
-                  (puritySum, [purity, amount]) =>
-                    puritySum + amount * purity.efficiencyMultiplier,
-                  0
-                ),
-              0
-            );
+            const wellSizeMultiplier: number = pipe(
+              satellites,
+              reduce(
+                (sizeSum, satellitesOfPurity) =>
+                  sizeSum +
+                  pipe(
+                    satellitesOfPurity.amounts,
+                    reduce(
+                      (puritySum, [purity, amount]) =>
+                        puritySum + amount * purity.efficiencyMultiplier,
+                      0
+                    )
+                  ).first!,
+                0
+              )
+            ).first!;
 
             return {
               id,
