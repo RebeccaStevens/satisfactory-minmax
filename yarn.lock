@@ -2512,10 +2512,10 @@ header-case@^2.0.4:
     capital-case "^1.0.4"
     tslib "^2.0.3"
 
-highs@^0.4.6:
-  version "0.4.6"
-  resolved "https://registry.yarnpkg.com/highs/-/highs-0.4.6.tgz#eaedcc78a835fa0e340affecb4352b2596bc7426"
-  integrity sha512-KY/vVfWVCptu45pPKlfEANg+rRU9bNE6fOdPslKNjw5va4pRInCnBVLeLlaiqZcYmJ0wdnwT+qB1gJCy9AD6sA==
+highs@^0.4.7:
+  version "0.4.7"
+  resolved "https://registry.yarnpkg.com/highs/-/highs-0.4.7.tgz#a44e4e5e3c56a8150c62bbfb8f4604bf243669b3"
+  integrity sha512-DSPfJi3euSMPBVe3sgbTwOLuwGgOi72ijHnE95YsSzqNJ02xtw/UZdY5iDMs26p4Vm5DOYGQvKu5A7XNo30Bpw==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
