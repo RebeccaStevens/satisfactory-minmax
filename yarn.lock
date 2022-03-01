@@ -2568,10 +2568,10 @@ header-case@^2.0.4:
     capital-case "^1.0.4"
     tslib "^2.0.3"
 
-highs@^0.4.7:
-  version "0.4.7"
-  resolved "https://registry.yarnpkg.com/highs/-/highs-0.4.7.tgz#a44e4e5e3c56a8150c62bbfb8f4604bf243669b3"
-  integrity sha512-DSPfJi3euSMPBVe3sgbTwOLuwGgOi72ijHnE95YsSzqNJ02xtw/UZdY5iDMs26p4Vm5DOYGQvKu5A7XNo30Bpw==
+highs@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/highs/-/highs-0.5.0.tgz#3f46167c92510375e72d03a7539ae1819b769000"
+  integrity sha512-UepmDhESWbo3su54eLHbEZBchJIVSo2vJbDNSO9kitnx0ll8sJz2oOvwS6sq41ydTHNqa8DlZ/+vlIQsvhlcHg==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
