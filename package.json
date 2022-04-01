@@ -28,7 +28,7 @@
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^16.11.12",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
-    "@typescript-eslint/parser": "^5.8.1",
+    "@typescript-eslint/parser": "^5.17.0",
     "commitizen": "^4.2.4",
     "cspell": "^5.18.5",
     "esbuild-node-loader": "^0.6.4",
