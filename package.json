@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "change-case": "^4.1.2",
-    "fs-extra": "^10.0.0",
+    "fs-extra": "^10.1.0",
     "highs": "^0.5.0",
     "iterare": "^1.2.1"
   },
