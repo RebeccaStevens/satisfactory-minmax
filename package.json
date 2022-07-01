@@ -48,7 +48,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-sonarjs": "^0.11.0",
     "eslint-plugin-unicorn": "^42.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "lint-staged": "^13.0.0",
     "markdownlint-cli": "^0.30.0",
     "marked": "^4.0.12",
