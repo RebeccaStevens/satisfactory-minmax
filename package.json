@@ -22,7 +22,7 @@
     "iterare": "^1.2.1"
   },
   "devDependencies": {
-    "@commitlint/cli": "^16.1.0",
+    "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.0.3",
     "@rebeccastevens/eslint-config": "^1.2.2",
     "@types/fs-extra": "^9.0.13",
