@@ -1,0 +1,54 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", "helpers:disableTypesNodeMajor"],
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "labels": ["Type: Maintenance", ":blue_heart:"],
+  "automerge": true,
+  "automergeType": "branch",
+  "automergeStrategy": "rebase",
+  "platformAutomerge": true,
+  "semanticCommits": "enabled",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "packageRules": [
+    {
+      "matchPaths": ["+(benchmark/package.json)"],
+      "rangeStrategy": "bump",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "benchmark"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["dependencies"],
+      "rangeStrategy": "update-lockfile",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps",
+      "major": {
+        "semanticCommitType": "build"
+      }
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["devDependencies"],
+      "rangeStrategy": "update-lockfile",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "dev-deps"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchDepTypes": ["peerDependencies"],
+      "rangeStrategy": "widen",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "peer-deps",
+      "major": {
+        "semanticCommitType": "build"
+      }
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "rangeStrategy": "replace",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "dev-deps"
+    }
+  ]
+}
