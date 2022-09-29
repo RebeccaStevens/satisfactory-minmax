@@ -5,11 +5,11 @@ import { pipe, concat, filter, map, spread } from "iter-ops";
 import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
 import { isObject } from "src/utils.mjs";
 
-import type { ImmutableItem } from "./items/index.mjs";
+import type { Item } from "./items/index.mjs";
 import { getNonPhysicalItems, parseItems } from "./items/index.mjs";
-import type { ImmutableMachine } from "./machines/index.mjs";
+import type { Machine } from "./machines/index.mjs";
 import { hasMachineRecipes, parseMachines } from "./machines/index.mjs";
-import type { ImmutableRecipe } from "./recipes/index.mjs";
+import type { Recipe } from "./recipes/index.mjs";
 import { parseRecipes } from "./recipes/index.mjs";
 
 /**
@@ -44,7 +44,7 @@ export function loadItems(
     pipe(
       [],
       concat(byInternalClassName.values(), nonPhysicalItems),
-      map((item): [string, ImmutableItem] => [item.id, item])
+      map((item): [string, Item] => [item.id, item])
     )
   );
 
@@ -60,15 +60,15 @@ export function loadItems(
 export function loadMachines(
   rawGameDataByNativeClass: ImmutableMap<string, ImmutableArray<unknown>>,
   items: Readonly<{
-    byInternalClassName: ImmutableMap<string, ImmutableItem>;
-    byId: ImmutableMap<ImmutableItem["id"], ImmutableItem>;
+    byInternalClassName: ImmutableMap<string, Item>;
+    byId: ImmutableMap<Item["id"], Item>;
   }>
 ) {
   const byInternalClassName = parseMachines(rawGameDataByNativeClass, items);
   const byId = new Map(
     pipe(
       byInternalClassName.values(),
-      map((machine): [string, ImmutableMachine] => [machine.id, machine])
+      map((machine): [string, Machine] => [machine.id, machine])
     )
   );
 
@@ -83,8 +83,8 @@ export function loadMachines(
  */
 export function loadRecipes(
   rawGameDataByNativeClass: ImmutableMap<string, ImmutableArray<unknown>>,
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>,
-  machinesByInternalClassName: ImmutableMap<string, ImmutableMachine>
+  itemsByInternalClassName: ImmutableMap<string, Item>,
+  machinesByInternalClassName: ImmutableMap<string, Machine>
 ) {
   const baseRecipes = parseRecipes(
     rawGameDataByNativeClass,
@@ -97,7 +97,7 @@ export function loadRecipes(
     filter(hasMachineRecipes),
     map((machineWithRecipes) => {
       return [...machineWithRecipes.machineRecipes.values()].map(
-        (recipe): [ImmutableRecipe["id"], ImmutableRecipe] => [
+        (recipe): [Recipe["id"], Recipe] => [
           recipe.id,
           { ...recipe, canBeProducedIn: new Set([machineWithRecipes]) },
         ]
@@ -110,37 +110,37 @@ export function loadRecipes(
 }
 
 export {
-  type ImmutableItem,
-  type ImmutableNonPhysicalItem,
-  type ImmutablePartItem,
-  type ImmutableAmmoItem,
-  type ImmutableResourceItem,
+  type Item,
+  type NonPhysicalItem,
+  type PartItem,
+  type AmmoItem,
+  type ResourceItem,
 } from "./items/index.mjs";
 export { ItemType, TransferType } from "./items/index.mjs";
 export {
-  type ImmutableMachine,
-  type ImmutableManufacturingMachine,
-  type ImmutableManufacturingVariablePowerMachine,
-  type ImmutableNodeExtractingMachine,
-  type ImmutableFrackingExtractorMachine,
-  type ImmutablePowerProducingMachine,
-  type ImmutableItemSinkMachine,
-  type ImmutableFrackingActivatorMachine,
+  type Machine,
+  type ManufacturingMachine,
+  type ManufacturingVariablePowerMachine,
+  type NodeExtractingMachine,
+  type FrackingExtractorMachine,
+  type PowerProducingMachine,
+  type ItemSinkMachine,
+  type FrackingActivatorMachine,
 } from "./machines/index.mjs";
 export { MachineType } from "./machines/index.mjs";
 export {
-  type ImmutableItemAmount,
-  type ImmutableRecipe,
-  type ImmutableRecipeBase,
-  type ImmutablePartRecipe,
-  type ImmutableResourceNodeRecipe,
-  type ImmutableResourceWellRecipe,
-  type ImmutableSinkRecipe,
-  type ImmutableAppliedRecipe,
-  type ImmutableAppliedRecipeBase,
-  type ImmutableAppliedPartRecipe,
-  type ImmutableAppliedResourceNodeRecipe,
-  type ImmutableAppliedResourceWellRecipe,
-  type ImmutableAppliedSinkRecipe,
+  type ItemAmount,
+  type Recipe,
+  type RecipeBase,
+  type PartRecipe,
+  type ResourceNodeRecipe,
+  type ResourceWellRecipe,
+  type SinkRecipe,
+  type AppliedRecipe,
+  type AppliedRecipeBase,
+  type AppliedPartRecipe,
+  type AppliedResourceNodeRecipe,
+  type AppliedResourceWellRecipe,
+  type AppliedSinkRecipe,
 } from "./recipes/index.mjs";
 export { RecipeType } from "./recipes/index.mjs";

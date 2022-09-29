@@ -2,7 +2,6 @@ import assert from "node:assert";
 
 import { snakeCase } from "change-case";
 import { pipe, filter, map } from "iter-ops";
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
 import type { Item } from "src/data/game/items/types.mjs";
 import { ItemType, TransferType } from "src/data/game/items/types.mjs";
 import { parseRawCollection } from "src/data/game/raw-collection-parser.mjs";
@@ -15,7 +14,6 @@ import { getMaxBeltTransferRate } from "src/data/map/utils.mjs";
 import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
 import { assertNotUndefined, isNotNull, isObject } from "src/utils.mjs";
 
-import type { ImmutableMachine } from "./immutable-types.mjs";
 import {
   isRawFrackingActivatorMachine,
   isRawPowerProducingMachine,
@@ -61,10 +59,10 @@ import { MachineType } from "./types.mjs";
 export function parseMachines(
   rawData: ImmutableMap<string, ImmutableArray<unknown>>,
   items: Readonly<{
-    byInternalClassName: ImmutableMap<string, ImmutableItem>;
-    byId: ImmutableMap<ImmutableItem["id"], ImmutableItem>;
+    byInternalClassName: ImmutableMap<string, Item>;
+    byId: ImmutableMap<Item["id"], Item>;
   }>
-): Map<string, ImmutableMachine> {
+): Map<string, Machine> {
   const getRawDataClasses = (nativeClass: string) => {
     const rawDataClasses = rawData.get(nativeClass);
     assert(rawDataClasses !== undefined);
@@ -365,7 +363,7 @@ function parseNodeExtractingMachine(
 function parseWellExtractingMachines(
   rawActivatorData: ImmutableArray<unknown>,
   rawExtractorData: ImmutableArray<unknown>,
-  itemsById: ImmutableMap<string, ImmutableItem>
+  itemsById: ImmutableMap<string, Item>
 ): Array<[string, FrackingActivatorMachine]> {
   const items = [
     itemsById.get("item_crude_oil"),
@@ -473,7 +471,7 @@ function parseFrackingExtractorMachine(
  */
 function parseWaterPumpMachines(
   rawData: ImmutableArray<unknown>,
-  itemsById: ImmutableMap<string, ImmutableItem>
+  itemsById: ImmutableMap<string, Item>
 ): Array<[string, NodeExtractingMachine]> {
   const water = itemsById.get("item_water");
   assert(water !== undefined);
@@ -574,7 +572,7 @@ function parseBasePowerProducingMachine(
  */
 function parsePowerProducingMachines(
   rawData: ImmutableArray<unknown>,
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
+  itemsByInternalClassName: ImmutableMap<string, Item>
 ): Array<[string, PowerProducingMachine]> {
   return rawData.map((rawClassData) => {
     assert(
@@ -593,7 +591,7 @@ function parsePowerProducingMachines(
  */
 function parsePowerProducingMachine(
   rawData: RawPowerProducingMachine,
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
+  itemsByInternalClassName: ImmutableMap<string, Item>
 ): [string, PowerProducingMachine] {
   const base = parseBasePowerProducingMachine(
     rawData,
@@ -748,7 +746,7 @@ function parseVariablePowerProducingMachine(
  */
 function parseItemSinkMachines(
   rawData: ImmutableArray<unknown>,
-  itemsById: ImmutableMap<string, ImmutableItem>
+  itemsById: ImmutableMap<string, Item>
 ): Array<[string, ItemSinkMachine]> {
   return rawData.map((rawClassData) => {
     assert(
@@ -767,7 +765,7 @@ function parseItemSinkMachines(
  */
 function parseItemSinkMachine(
   rawData: RawItemSinkMachine,
-  itemsById: ImmutableMap<string, ImmutableItem>
+  itemsById: ImmutableMap<string, Item>
 ): [string, ItemSinkMachine] {
   const base = parseMachineBase(rawData, MachineType.ITEM_SINK);
 

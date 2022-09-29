@@ -3,11 +3,7 @@ import assert from "node:assert";
 import type { HighsSolution } from "highs";
 import { pipe, filter, map } from "iter-ops";
 import { TransferType } from "src/data/game/items/types.mjs";
-import type {
-  ImmutableAppliedRecipe,
-  ImmutableData,
-  ImmutableItem,
-} from "src/data/index.mjs";
+import type { AppliedRecipe, Data, Item } from "src/data/index.mjs";
 import { RecipeType } from "src/data/index.mjs";
 import type { ImmutableMap } from "src/immutable-types.mjs";
 import { getRecipeProductionRate } from "src/solver/utils.mjs";
@@ -18,8 +14,8 @@ import { isNotNull } from "src/utils.mjs";
  */
 export function analyseResult(
   result: HighsSolution,
-  data: ImmutableData,
-  appliedRecipes: ImmutableMap<string, ImmutableAppliedRecipe>
+  data: Data,
+  appliedRecipes: ImmutableMap<string, AppliedRecipe>
 ) {
   if (result.Status !== "Optimal") {
     throw new Error("Failed to solve LP.");
@@ -40,7 +36,7 @@ export function analyseResult(
   const state = new Map(
     pipe(
       data.items.values(),
-      map((item): [ImmutableItem, number] => [item, 0])
+      map((item): [Item, number] => [item, 0])
     )
   );
 
@@ -142,7 +138,7 @@ export function analyseResult(
  * Get the item rate for the given recipe.
  */
 function getItemRateForRecipes(
-  recipe: ImmutableAppliedRecipe,
+  recipe: AppliedRecipe,
   recipeCounts: ImmutableMap<string, number>,
   itemAmount: number
 ) {
@@ -153,6 +149,6 @@ function getItemRateForRecipes(
 /**
  * Transform units of rates to units the game UI uses.
  */
-function getAdjustedRate(item: ImmutableItem, rate: number) {
+function getAdjustedRate(item: Item, rate: number) {
   return item.transferType === TransferType.PIPE ? rate / 1000 : rate;
 }

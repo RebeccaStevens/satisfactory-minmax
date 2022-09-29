@@ -150,6 +150,22 @@ function parseResourceItem(rawData: RawResourceItem): [string, ResourceItem] {
 }
 
 /**
+ * Parse all the ammo items.
+ */
+function parseAmmoItems(rawData: ImmutableArray<unknown>) {
+  return rawData.map((rawClassData) => {
+    assert(
+      isObject(rawClassData) &&
+        isRawBase(rawClassData) &&
+        isRawItemBase(rawClassData) &&
+        isRawAmmoItem(rawClassData)
+    );
+
+    return parseAmmoItem(rawClassData);
+  });
+}
+
+/**
  * Parse an ammo item.
  */
 function parseAmmoItem(rawData: RawAmmoItem): [string, AmmoItem] {

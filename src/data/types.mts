@@ -1,27 +1,22 @@
+import type { Item, Machine, Recipe, ResourceItem } from "./game/index.mjs";
 import type {
-  ImmutableItem,
-  ImmutableMachine,
-  ImmutableRecipe,
-  ImmutableResourceItem,
-} from "./game/index.mjs";
-import type {
-  ImmutableGeysers,
-  ImmutablePurities,
-  ImmutableResourceNodes,
-  ImmutableResourceWell,
-} from "./map/immutable-types.mjs";
+  Geysers,
+  Purities,
+  ResourceNodes,
+  ResourceWell,
+} from "./map/types.mjs";
 
 /**
  * All the loaded data.
  */
 export type Data = {
-  items: Map<string, ImmutableItem>;
-  machines: Map<string, ImmutableMachine>;
-  recipes: Map<string, ImmutableRecipe>;
-  purities: ImmutablePurities;
-  geysers: ImmutableGeysers;
-  resourceNodes: Map<ImmutableResourceItem, ImmutableResourceNodes>;
-  resourceWells: Map<ImmutableResourceItem, Set<ImmutableResourceWell>>;
+  items: Map<string, Item>;
+  machines: Map<string, Machine>;
+  recipes: Map<string, Recipe>;
+  purities: Purities;
+  geysers: Geysers;
+  resourceNodes: Map<ResourceItem, ResourceNodes>;
+  resourceWells: Map<ResourceItem, Set<ResourceWell>>;
 };
 
 /**

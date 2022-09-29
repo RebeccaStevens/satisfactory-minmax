@@ -1,14 +1,14 @@
-import type { ImmutableData, ImmutableItem } from "src/data/index.mjs";
+import type { Data, Item } from "src/data/index.mjs";
 import type { ImmutableMap } from "src/immutable-types.mjs";
 
 import { getAppliedRecipes } from "./applied-recipes.mjs";
 import { loadLp, solveLp } from "./lp/index.mjs";
 
 export async function runSolver(
-  data: ImmutableData,
-  itemToMax: ImmutableItem,
+  data: Data,
+  itemToMax: Item,
   excessPower = 0,
-  excessItems?: ImmutableMap<ImmutableItem, number>
+  excessItems?: ImmutableMap<Item, number>
 ) {
   const appliedRecipes = getAppliedRecipes(data);
 

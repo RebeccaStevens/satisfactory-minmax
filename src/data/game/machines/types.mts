@@ -1,4 +1,3 @@
-import type { ImmutableFrackingExtractorMachine } from "src/data/game/machines/immutable-types.mjs";
 import type { Recipe } from "src/data/game/recipes/types.mjs";
 import type { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import type { Ided, Named } from "src/data/types.mjs";
@@ -128,7 +127,7 @@ export type ItemSinkMachine = MachineBase & {
  */
 export type FrackingActivatorMachine = MachineBase & {
   machineType: MachineType.FRACKING_ACTIVATOR;
-  extractors: Set<ImmutableFrackingExtractorMachine>;
+  extractors: Set<FrackingExtractorMachine>;
 };
 
 /**

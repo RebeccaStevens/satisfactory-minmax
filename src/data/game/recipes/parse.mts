@@ -1,10 +1,8 @@
 import assert from "node:assert";
 
 import { pipe, filter, map, spread, every } from "iter-ops";
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
-import { ItemType } from "src/data/game/items/types.mjs";
-import type { ImmutableMachine } from "src/data/game/machines/immutable-types.mjs";
-import { MachineType } from "src/data/game/machines/types.mjs";
+import { type Item, ItemType } from "src/data/game/items/types.mjs";
+import { type Machine, MachineType } from "src/data/game/machines/types.mjs";
 import { parseRawCollection } from "src/data/game/raw-collection-parser.mjs";
 import { isRawBase } from "src/data/game/raw-types.mjs";
 import {
@@ -25,8 +23,8 @@ import { RecipeType } from "./types.mjs";
  */
 export function parseRecipes(
   rawData: ImmutableMap<string, ImmutableArray<unknown>>,
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>,
-  machinesByInternalClassName: ImmutableMap<string, ImmutableMachine>
+  itemsByInternalClassName: ImmutableMap<string, Item>,
+  machinesByInternalClassName: ImmutableMap<string, Machine>
 ): Map<Recipe["id"], Recipe> {
   const nativeClass = "Class'/Script/FactoryGame.FGRecipe'";
   const rawClassesData = rawData.get(nativeClass);
@@ -56,8 +54,8 @@ export function parseRecipes(
  */
 function parseRecipe(
   rawData: RawRecipe,
-  machinesByInternalClassName: ImmutableMap<string, ImmutableMachine>,
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
+  machinesByInternalClassName: ImmutableMap<string, Machine>,
+  itemsByInternalClassName: ImmutableMap<string, Item>
 ): Recipe {
   const base = parseBase(rawData, "recipe");
 
@@ -88,7 +86,7 @@ function parseRecipe(
     ).first === true;
 
   const ingredientAmounts = isResourceRecipe
-    ? new Map<ImmutableItem, ItemAmount>()
+    ? new Map<Item, ItemAmount>()
     : statedIngredientAmounts;
 
   const rawProducedIn =
@@ -200,8 +198,8 @@ function parseRecipe(
  * Get a function that can parse raw input and output data of a recipe.
  */
 function getParseRawIoFunction(
-  itemsByInternalClassName: ImmutableMap<string, ImmutableItem>
-): (rawItemAmount: unknown) => [ImmutableItem, ItemAmount] | null {
+  itemsByInternalClassName: ImmutableMap<string, Item>
+): (rawItemAmount: unknown) => [Item, ItemAmount] | null {
   return (rawItemAmount) => {
     assert(rawItemAmount instanceof Map);
 

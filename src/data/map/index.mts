@@ -3,13 +3,14 @@ import assert from "node:assert";
 import { snakeCase } from "change-case";
 import mapJsonData from "data/map.json" assert { type: "json" };
 import { pipe, reduce } from "iter-ops";
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
-import type { ResourceItem } from "src/data/game/items/types.mjs";
-import { ItemType } from "src/data/game/items/types.mjs";
+import {
+  type Item,
+  type ResourceItem,
+  ItemType,
+} from "src/data/game/items/types.mjs";
 import type { ImmutableMap } from "src/immutable-types.mjs";
 import { isNotNull, isObject } from "src/utils.mjs";
 
-import type { ImmutablePurities } from "./immutable-types.mjs";
 import type {
   Geysers,
   Purities,
@@ -22,9 +23,7 @@ import type {
 /**
  * Load all the map data.
  */
-export function loadMapData(
-  itemsById: ImmutableMap<ImmutableItem["id"], ImmutableItem>
-) {
+export function loadMapData(itemsById: ImmutableMap<Item["id"], Item>) {
   assert(isObject(mapJsonData));
 
   const purities = parsePurities();
@@ -59,8 +58,8 @@ function parsePurities(): Purities {
  * Get all the resources node types and how many of each exist.
  */
 function parseResourceNodes(
-  itemsById: ImmutableMap<string, ImmutableItem>,
-  purities: ImmutablePurities
+  itemsById: ImmutableMap<string, Item>,
+  purities: Purities
 ): Map<ResourceItem, ResourceNodes> {
   return new Map(
     Object.entries(mapJsonData.resources.nodes)
@@ -87,8 +86,8 @@ function parseResourceNodes(
  * Get all the resources well types and how many of each exist.
  */
 function parseResourceWells(
-  itemsById: ImmutableMap<string, ImmutableItem>,
-  purities: ImmutablePurities
+  itemsById: ImmutableMap<string, Item>,
+  purities: Purities
 ): Map<ResourceItem, Set<ResourceWell>> {
   return new Map(
     Object.entries(mapJsonData.resources.wells).map(
@@ -145,7 +144,7 @@ function parseResourceWells(
 /**
  * Get all the geysers types and how many of each exist.
  */
-function parseGeysers(purities: ImmutablePurities): Geysers {
+function parseGeysers(purities: Purities): Geysers {
   return getAmounts(mapJsonData.geysers, purities);
 }
 
@@ -154,7 +153,7 @@ function parseGeysers(purities: ImmutablePurities): Geysers {
  */
 function getAmounts(
   rawPurities: Readonly<Record<string, number>>,
-  purities: ImmutablePurities
+  purities: Purities
 ) {
   return new Map(
     Object.entries(rawPurities).map(([purityId, amount]) => {
@@ -166,12 +165,12 @@ function getAmounts(
 }
 
 export {
-  type ImmutablePurities,
-  type ImmutablePurity,
-  type ImmutablePurityCollection,
-  type ImmutableResourceNodes,
-  type ImmutableResourceWell,
-  type ImmutableResourceWellSatellites,
-  type ImmutableGeysers,
-} from "./immutable-types.mjs";
-export { ResourceNodeExtractorType } from "./types.mjs";
+  type Purities,
+  type Purity,
+  type PurityCollection,
+  type ResourceNodes,
+  type ResourceWell,
+  type ResourceWellSatellites,
+  type Geysers,
+  ResourceNodeExtractorType,
+} from "./types.mjs";

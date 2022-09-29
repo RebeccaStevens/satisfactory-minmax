@@ -3,12 +3,7 @@ import assert from "node:assert";
 import { snakeCase } from "change-case";
 import { pipe, filter, map, spread, reduce, concat } from "iter-ops";
 import { RecipeType } from "src/data/index.mjs";
-import type {
-  ImmutableItem,
-  ImmutableAppliedRecipe,
-  ImmutableData,
-  ImmutablePurity,
-} from "src/data/index.mjs";
+import type { Item, AppliedRecipe, Data, Purity } from "src/data/index.mjs";
 import type { ImmutableMap, ImmutableSet } from "src/immutable-types.mjs";
 import {
   getRecipesByInputItem,
@@ -21,11 +16,11 @@ import { isNotNull } from "src/utils.mjs";
  * Generate the linear problem.
  */
 export function generateLp(
-  data: ImmutableData,
-  recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
-  itemToMax: ImmutableItem,
+  data: Data,
+  recipes: ImmutableMap<AppliedRecipe["id"], AppliedRecipe>,
+  itemToMax: Item,
   excessPower = 0,
-  excessItems?: ImmutableMap<ImmutableItem, number>
+  excessItems?: ImmutableMap<Item, number>
 ) {
   const recipesByInputItem = getRecipesByInputItem(recipes, data.items);
   const recipesByOutputItem = getRecipesByOutputItem(recipes, data.items);
@@ -80,7 +75,7 @@ export function generateLp(
 
       const ioRates = pipe(
         itemRecipes,
-        map((recipe): [ImmutableAppliedRecipe, number] => [
+        map((recipe): [AppliedRecipe, number] => [
           recipe,
           ((outputAmounts.get(recipe) ?? 0) - (inputAmounts.get(recipe) ?? 0)) *
             getRecipeProductionRate(recipe),
@@ -139,7 +134,7 @@ export function generateLp(
           pipe(
             itemRecipes,
             filter((recipe) => recipe.recipeType === RecipeType.RESOURCE_NODE),
-            map((recipe): [ImmutablePurity, string] => {
+            map((recipe): [Purity, string] => {
               assert(recipe.recipeType === RecipeType.RESOURCE_NODE);
 
               const outputItemRecipes = recipesByOutputItem.get(item);
@@ -169,7 +164,7 @@ export function generateLp(
       pipe(
         recipes.values(),
         filter((recipe) => recipe.recipeType === RecipeType.GEOTHERMAL_POWER),
-        map((recipe): [ImmutablePurity, string] => {
+        map((recipe): [Purity, string] => {
           assert(recipe.recipeType === RecipeType.GEOTHERMAL_POWER);
           return [recipe.purity, recipe.id];
         })
@@ -268,19 +263,16 @@ export function generateLp(
 }
 
 function getRecipePurityConstrants(
-  recipesByPurity: Readonly<Iterable<readonly [ImmutablePurity, string]>>
+  recipesByPurity: Readonly<Iterable<readonly [Purity, string]>>
 ) {
-  return pipe<
-    readonly [ImmutablePurity, string],
-    Map<Readonly<ImmutablePurity>, string[]>
-  >(
+  return pipe<readonly [Purity, string], Map<Readonly<Purity>, string[]>>(
     recipesByPurity,
     reduce((carry, [purity, id]) => {
       const ids = carry.get(purity) ?? [];
       carry.set(purity, [...ids, id]);
 
       return carry;
-    }, new Map<ImmutablePurity, string[]>())
+    }, new Map<Purity, string[]>())
   ).first!;
 }
 
@@ -288,15 +280,9 @@ function getRecipePurityConstrants(
  * Get the input and output amounts for the given item by it's applied recipes
  */
 function getItemIoAmountForItemByAppliedRecipe(
-  item: ImmutableItem,
-  appliedRecipesByInputItem: ImmutableMap<
-    ImmutableItem,
-    ImmutableSet<ImmutableAppliedRecipe>
-  >,
-  appliedRecipesByOutputItem: ImmutableMap<
-    ImmutableItem,
-    ImmutableSet<ImmutableAppliedRecipe>
-  >
+  item: Item,
+  appliedRecipesByInputItem: ImmutableMap<Item, ImmutableSet<AppliedRecipe>>,
+  appliedRecipesByOutputItem: ImmutableMap<Item, ImmutableSet<AppliedRecipe>>
 ) {
   const inputItemRecipes = appliedRecipesByInputItem.get(item);
   const outputItemRecipes = appliedRecipesByOutputItem.get(item);
@@ -320,13 +306,13 @@ function getItemIoAmountForItemByAppliedRecipe(
  * Get the ingredient amounts needed of an item by the applied recipes.
  */
 function getIngredientAmountsForItemByRecipe(
-  itemAppliedRecipes: ImmutableSet<ImmutableAppliedRecipe>,
-  item: ImmutableItem
+  itemAppliedRecipes: ImmutableSet<AppliedRecipe>,
+  item: Item
 ) {
   return new Map(
     pipe(
       itemAppliedRecipes,
-      map((recipe): [ImmutableAppliedRecipe, number] => {
+      map((recipe): [AppliedRecipe, number] => {
         const itemAmount = recipe.ingredientAmounts.get(item);
         assert(itemAmount !== undefined);
         return [recipe, itemAmount.amount];
@@ -339,13 +325,13 @@ function getIngredientAmountsForItemByRecipe(
  * Get the product amounts of an item produced by the applied recipes.
  */
 function getProductAmountsForItemByRecipe(
-  itemAppliedRecipes: ImmutableSet<ImmutableAppliedRecipe>,
-  item: ImmutableItem
+  itemAppliedRecipes: ImmutableSet<AppliedRecipe>,
+  item: Item
 ) {
   return new Map(
     pipe(
       itemAppliedRecipes,
-      map((recipe): [ImmutableAppliedRecipe, number] => {
+      map((recipe): [AppliedRecipe, number] => {
         const itemAmount = recipe.productAmounts.get(item);
         assert(itemAmount !== undefined);
         return [recipe, itemAmount.amount];

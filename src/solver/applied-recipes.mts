@@ -3,28 +3,27 @@ import assert from "node:assert";
 import { snakeCase } from "change-case";
 import { pipe, filter, map, spread } from "iter-ops";
 import type {
-  ImmutableFrackingActivatorMachine,
-  ImmutableMachine,
-  ImmutableNodeExtractingMachine,
-  ImmutableVariablePowerProducingMachine,
-} from "src/data/game/machines/immutable-types.mjs";
-import type { Machine } from "src/data/game/machines/types.mjs";
+  FrackingActivatorMachine,
+  Machine,
+  NodeExtractingMachine,
+  VariablePowerProducingMachine,
+} from "src/data/game/machines/types.mjs";
 import { MachineType } from "src/data/game/machines/types.mjs";
 import type {
-  ImmutableAppliedGeothermalPowerRecipe,
-  ImmutableAppliedPartRecipe,
-  ImmutableAppliedRecipe,
-  ImmutableAppliedResourceNodeRecipe,
-  ImmutableAppliedResourceWellRecipe,
-  ImmutableAppliedSinkRecipe,
-  ImmutableGeothermalPowerRecipe,
-  ImmutablePartRecipe,
-  ImmutableResourceNodeRecipe,
-  ImmutableResourceWellRecipe,
-  ImmutableSinkRecipe,
-} from "src/data/game/recipes/immutable-types.mjs";
+  AppliedGeothermalPowerRecipe,
+  AppliedRecipeBase,
+  AppliedRecipe,
+  AppliedResourceNodeRecipe,
+  AppliedResourceWellRecipe,
+  AppliedSinkRecipe,
+  GeothermalPowerRecipe,
+  PartRecipe,
+  ResourceNodeRecipe,
+  ResourceWellRecipe,
+  SinkRecipe,
+} from "src/data/game/recipes/types.mjs";
 import { RecipeType } from "src/data/game/recipes/types.mjs";
-import type { ImmutableData } from "src/data/immutable-types.mjs";
+import type { Data } from "src/data/types.mjs";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import { isNotNull, transpose } from "src/utils.mjs";
 
@@ -39,59 +38,53 @@ import {
  * Get all the recipes once applied to the possible machines.
  */
 export function getAppliedRecipes(
-  data: ImmutableData
-): Map<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe> {
+  data: Data
+): Map<AppliedRecipe["id"], AppliedRecipe> {
   return new Map(
     pipe(
       data.recipes.values(),
       map((recipe) => {
         const appliedRecipes = pipe(
           recipe.canBeProducedIn,
-          map(
-            (
-              machine
-            ): Array<
-              [ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe]
-            > => {
-              if (recipe.recipeType === RecipeType.SINK) {
-                return getAppliedSinkRecipes(recipe, machine);
-              }
-
-              if (recipe.recipeType === RecipeType.RESOURCE_NODE) {
-                assert(machine.machineType === MachineType.EXTRACTING);
-
-                if (machine.extractorType === ResourceNodeExtractorType.WATER) {
-                  return getAppliedWaterPumpRecipes(
-                    recipe,
-                    machine as Machine & {
-                      machineType: MachineType.EXTRACTING;
-                      extractorType: ResourceNodeExtractorType.WATER;
-                    },
-                    data
-                  );
-                }
-
-                return getAppliedResourceNodeRecipes(recipe, machine, data);
-              }
-
-              if (recipe.recipeType === RecipeType.RESOURCE_WELL) {
-                assert(machine.machineType === MachineType.FRACKING_ACTIVATOR);
-                return getAppliedResourceWellRecipes(recipe, machine, data);
-              }
-
-              if (recipe.recipeType === RecipeType.GEOTHERMAL_POWER) {
-                assert(
-                  machine.machineType === MachineType.VARIABLE_POWER_PRODUCING
-                );
-                return getAppliedGeothermalPowerRecipes(recipe, machine, data);
-              }
-
-              // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-              assert(recipe.recipeType === RecipeType.PART);
-
-              return getAppliedPartRecipes(recipe, machine);
+          map((machine): Array<[AppliedRecipe["id"], AppliedRecipe]> => {
+            if (recipe.recipeType === RecipeType.SINK) {
+              return getAppliedSinkRecipes(recipe, machine);
             }
-          ),
+
+            if (recipe.recipeType === RecipeType.RESOURCE_NODE) {
+              assert(machine.machineType === MachineType.EXTRACTING);
+
+              if (machine.extractorType === ResourceNodeExtractorType.WATER) {
+                return getAppliedWaterPumpRecipes(
+                  recipe,
+                  machine as Machine & {
+                    machineType: MachineType.EXTRACTING;
+                    extractorType: ResourceNodeExtractorType.WATER;
+                  },
+                  data
+                );
+              }
+
+              return getAppliedResourceNodeRecipes(recipe, machine, data);
+            }
+
+            if (recipe.recipeType === RecipeType.RESOURCE_WELL) {
+              assert(machine.machineType === MachineType.FRACKING_ACTIVATOR);
+              return getAppliedResourceWellRecipes(recipe, machine, data);
+            }
+
+            if (recipe.recipeType === RecipeType.GEOTHERMAL_POWER) {
+              assert(
+                machine.machineType === MachineType.VARIABLE_POWER_PRODUCING
+              );
+              return getAppliedGeothermalPowerRecipes(recipe, machine, data);
+            }
+
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            assert(recipe.recipeType === RecipeType.PART);
+
+            return getAppliedPartRecipes(recipe, machine);
+          }),
           filter(isNotNull)
         );
 
@@ -114,9 +107,9 @@ export function getAppliedRecipes(
  * The all the sink recipes applied to the possible machines.
  */
 function getAppliedSinkRecipes(
-  recipe: ImmutableSinkRecipe,
-  machine: ImmutableMachine
-): Array<[ImmutableAppliedSinkRecipe["id"], ImmutableAppliedSinkRecipe]> {
+  recipe: SinkRecipe,
+  machine: Machine
+): Array<[AppliedSinkRecipe["id"], AppliedSinkRecipe]> {
   const overclock = 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`sink ${recipe.name} with ${machine.name}`);
@@ -124,7 +117,7 @@ function getAppliedSinkRecipes(
 
   const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-  const appliedRecipe: ImmutableAppliedSinkRecipe = {
+  const appliedRecipe: AppliedSinkRecipe = {
     ...appliedRecipeData,
     id,
     machine,
@@ -140,22 +133,17 @@ function getAppliedSinkRecipes(
  * The all the resource node extraction recipes applied to the possible machines.
  */
 function getAppliedResourceNodeRecipes(
-  recipe: ImmutableResourceNodeRecipe,
-  machine: ImmutableNodeExtractingMachine,
-  data: ImmutableData
-): Array<
-  [ImmutableAppliedResourceNodeRecipe["id"], ImmutableAppliedResourceNodeRecipe]
-> {
+  recipe: ResourceNodeRecipe,
+  machine: NodeExtractingMachine,
+  data: Data
+): Array<[AppliedResourceNodeRecipe["id"], AppliedResourceNodeRecipe]> {
   return [
     ...pipe(
       data.purities.values(),
       map(
         (
           purity
-        ): [
-          ImmutableAppliedResourceNodeRecipe["id"],
-          ImmutableAppliedResourceNodeRecipe
-        ] => {
+        ): [AppliedResourceNodeRecipe["id"], AppliedResourceNodeRecipe] => {
           const overclock = getMaxEffectiveOverclock(
             recipe,
             machine,
@@ -172,7 +160,7 @@ function getAppliedResourceNodeRecipes(
 
           const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-          const appliedRecipe: ImmutableAppliedResourceNodeRecipe = {
+          const appliedRecipe: AppliedResourceNodeRecipe = {
             ...appliedRecipeData,
             id,
             machine,
@@ -193,15 +181,10 @@ function getAppliedResourceNodeRecipes(
  * The all the geothermal power recipes applied to the possible machines.
  */
 function getAppliedGeothermalPowerRecipes(
-  recipe: ImmutableGeothermalPowerRecipe,
-  machine: ImmutableVariablePowerProducingMachine,
-  data: ImmutableData
-): Array<
-  [
-    ImmutableAppliedGeothermalPowerRecipe["id"],
-    ImmutableAppliedGeothermalPowerRecipe
-  ]
-> {
+  recipe: GeothermalPowerRecipe,
+  machine: VariablePowerProducingMachine,
+  data: Data
+): Array<[AppliedGeothermalPowerRecipe["id"], AppliedGeothermalPowerRecipe]> {
   return [
     ...pipe(
       data.purities.values(),
@@ -209,8 +192,8 @@ function getAppliedGeothermalPowerRecipes(
         (
           purity
         ): [
-          ImmutableAppliedGeothermalPowerRecipe["id"],
-          ImmutableAppliedGeothermalPowerRecipe
+          AppliedGeothermalPowerRecipe["id"],
+          AppliedGeothermalPowerRecipe
         ] => {
           const overclock = 1;
           const efficiencyMultiplier = 1;
@@ -226,7 +209,7 @@ function getAppliedGeothermalPowerRecipes(
 
           const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-          const appliedRecipe: ImmutableAppliedGeothermalPowerRecipe = {
+          const appliedRecipe: AppliedGeothermalPowerRecipe = {
             ...appliedRecipeData,
             id,
             machine,
@@ -247,14 +230,12 @@ function getAppliedGeothermalPowerRecipes(
  * The all the water pump recipes applied to the possible machines.
  */
 function getAppliedWaterPumpRecipes(
-  recipe: ImmutableResourceNodeRecipe,
-  machine: ImmutableNodeExtractingMachine & {
+  recipe: ResourceNodeRecipe,
+  machine: NodeExtractingMachine & {
     extractorType: ResourceNodeExtractorType.WATER;
   },
-  data: ImmutableData
-): Array<
-  [ImmutableAppliedResourceNodeRecipe["id"], ImmutableAppliedResourceNodeRecipe]
-> {
+  data: Data
+): Array<[AppliedResourceNodeRecipe["id"], AppliedResourceNodeRecipe]> {
   const overclock = 1;
   const purity = data.purities.get("impure");
   assert(purity !== undefined);
@@ -265,7 +246,7 @@ function getAppliedWaterPumpRecipes(
 
   const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-  const appliedRecipe: ImmutableAppliedResourceNodeRecipe = {
+  const appliedRecipe: AppliedResourceNodeRecipe = {
     ...appliedRecipeData,
     id,
     machine,
@@ -282,12 +263,10 @@ function getAppliedWaterPumpRecipes(
  * The all the resource well extraction recipes applied to the possible machines.
  */
 function getAppliedResourceWellRecipes(
-  recipe: ImmutableResourceWellRecipe,
-  machine: ImmutableFrackingActivatorMachine,
-  data: ImmutableData
-): Array<
-  [ImmutableAppliedResourceWellRecipe["id"], ImmutableAppliedResourceWellRecipe]
-> {
+  recipe: ResourceWellRecipe,
+  machine: FrackingActivatorMachine,
+  data: Data
+): Array<[AppliedResourceWellRecipe["id"], AppliedResourceWellRecipe]> {
   assert(recipe.productAmounts.size === 1);
   const resource = [...recipe.productAmounts.keys()][0];
 
@@ -298,7 +277,7 @@ function getAppliedResourceWellRecipes(
     return [
       ...pipe(
         machine.extractors,
-        map((extractor): [string, ImmutableAppliedResourceWellRecipe] => {
+        map((extractor): [string, AppliedResourceWellRecipe] => {
           const overclock = getMaxEffectiveWellOverclock(
             recipe,
             machine,
@@ -316,7 +295,7 @@ function getAppliedResourceWellRecipes(
 
           const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-          const appliedRecipe: ImmutableAppliedResourceWellRecipe = {
+          const appliedRecipe: AppliedResourceWellRecipe = {
             ...appliedRecipeData,
             id,
             machine,
@@ -337,9 +316,9 @@ function getAppliedResourceWellRecipes(
  * The all the part recipes applied to the possible machines.
  */
 function getAppliedPartRecipes(
-  recipe: ImmutablePartRecipe,
-  machine: ImmutableMachine
-): Array<[ImmutableAppliedPartRecipe["id"], ImmutableAppliedPartRecipe]> {
+  recipe: PartRecipe,
+  machine: Machine
+): Array<[AppliedRecipeBase["id"], AppliedRecipeBase]> {
   const overclock = machine.id === "machine_particle_accelerator" ? 0.5 : 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`recipe ${recipe.name} in ${machine.name}`);
@@ -348,7 +327,7 @@ function getAppliedPartRecipes(
 
   const { canBeProducedIn, ...appliedRecipeData } = recipe;
 
-  const appliedRecipe: ImmutableAppliedPartRecipe = {
+  const appliedRecipe: AppliedRecipeBase = {
     ...appliedRecipeData,
     id,
     machine,
