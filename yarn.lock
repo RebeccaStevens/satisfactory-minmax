@@ -2587,9 +2587,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-functional@npm:^5.0.0-beta.3":
-  version: 5.0.0-beta.3
-  resolution: "eslint-plugin-functional@npm:5.0.0-beta.3"
+"eslint-plugin-functional@npm:^5.0.0-beta.5":
+  version: 5.0.0-beta.5
+  resolution: "eslint-plugin-functional@npm:5.0.0-beta.5"
   dependencies:
     "@typescript-eslint/utils": ^5.10.2
     deepmerge-ts: ^4.0.3
@@ -2605,7 +2605,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: ae8d711e77dabcc31380d38a95b9bf4e80a24f945f88c35c2e6280614f3e281e099bf9af8ff16548eabe9562013fd8e45b9a9479313594cec2ce6a3001125ef4
+  checksum: 1d74278748902f200de867d2924d0da3c33d8ecee8148aeb86252ef7c8c46bd4a12fa798d69a9f65d6adf5c14546a2e9b031c15fc6b7cefb46a02df23967024a
   languageName: node
   linkType: hard
 
@@ -4041,17 +4041,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iter-ops@npm:1.6.2":
-  version: 1.6.2
-  resolution: "iter-ops@npm:1.6.2"
-  checksum: 0cf9f216f3e36cba5b20b7495dd747077974b6e9bb881c843fc4b0943958dd75e0734b696aa5faeb79f19a673f745cc2c76fcfc83ba84e21d6b61e0f12c08da9
-  languageName: node
-  linkType: hard
-
-"iter-ops@patch:iter-ops@npm%3A1.6.2#./.yarn/patches/iter-ops-npm-1.6.2-f9e49c46a8.patch::locator=satisfactory-minmax%40workspace%3A.":
-  version: 1.6.2
-  resolution: "iter-ops@patch:iter-ops@npm%3A1.6.2#./.yarn/patches/iter-ops-npm-1.6.2-f9e49c46a8.patch::version=1.6.2&hash=af3e67&locator=satisfactory-minmax%40workspace%3A."
-  checksum: 147c22c015f7237101715184646530242ee899758d34cb82f7c5d308a96c3a3e349db6544ac59cbc57af4a024452345c68da1e66b7fe50e8c5c535f0bf85cf27
+"iter-ops@npm:^2.0.0-beta.1":
+  version: 2.0.0-beta.1
+  resolution: "iter-ops@npm:2.0.0-beta.1"
+  checksum: f643584a3620fb8a1e962e2ab35ec2ef9f4768385909e528b2f74dd4bf6a0c8e22bb2b5d35f4f25bcc28127f125cbb1ead67da23b39bc177ea73b4088ab0775f
   languageName: node
   linkType: hard
 
@@ -5417,7 +5410,7 @@ __metadata:
     eslint-import-resolver-typescript: ^3.5.1
     eslint-plugin-ava: ^13.2.0
     eslint-plugin-eslint-comments: ^3.2.0
-    eslint-plugin-functional: ^5.0.0-beta.3
+    eslint-plugin-functional: ^5.0.0-beta.5
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsdoc: ^39.3.6
     eslint-plugin-markdown: ^3.0.0
@@ -5430,7 +5423,7 @@ __metadata:
     fs-extra: ^10.1.0
     highs: ^0.7.2
     husky: ^8.0.1
-    iter-ops: ^1.6.2
+    iter-ops: ^2.0.0-beta.1
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
     marked: ^4.1.0

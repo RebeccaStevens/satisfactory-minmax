@@ -19,7 +19,7 @@
     "change-case": "^4.1.2",
     "fs-extra": "^10.1.0",
     "highs": "^0.7.2",
-    "iter-ops": "^1.6.2"
+    "iter-ops": "^2.0.0-beta.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -37,7 +37,7 @@
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-ava": "^13.2.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-functional": "^5.0.0-beta.3",
+    "eslint-plugin-functional": "^5.0.0-beta.5",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "^39.3.6",
     "eslint-plugin-markdown": "^3.0.0",
@@ -59,8 +59,5 @@
   "packageManager": "yarn@3.2.3",
   "engines": {
     "node": ">=17.0.0"
-  },
-  "resolutions": {
-    "iter-ops@^1.6.2": "patch:iter-ops@npm%3A1.6.2#./.yarn/patches/iter-ops-npm-1.6.2-f9e49c46a8.patch"
   }
 }
