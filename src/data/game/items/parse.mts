@@ -36,7 +36,7 @@ export function parseItems(
   // The function used to map native class names to an array of its classes' data.
   const getRawDataClasses = (nativeClass: string) => {
     const rawDataClasses = rawData.get(nativeClass);
-    assert(rawDataClasses !== undefined);
+    assert(rawDataClasses !== undefined, `Could not find "${nativeClass}"`);
     return rawDataClasses;
   };
 
@@ -45,13 +45,6 @@ export function parseItems(
       ...["Class'/Script/FactoryGame.FGResourceDescriptor'"].flatMap(
         getRawDataClasses
       ),
-    ]),
-    ...parseAmmoItems([
-      ...[
-        "Class'/Script/FactoryGame.FGItemDescAmmoTypeColorCartridge'",
-        "Class'/Script/FactoryGame.FGItemDescAmmoTypeInstantHit'",
-        "Class'/Script/FactoryGame.FGItemDescAmmoTypeProjectile'",
-      ].flatMap(getRawDataClasses),
     ]),
     ...parsePartsItems([
       ...[
@@ -154,22 +147,6 @@ function parseResourceItem(rawData: RawResourceItem): [string, ResourceItem] {
       collectSpeedMultiplier,
     },
   ];
-}
-
-/**
- * Parse all the ammo items.
- */
-function parseAmmoItems(rawData: ImmutableArray<unknown>) {
-  return rawData.map((rawClassData) => {
-    assert(
-      isObject(rawClassData) &&
-        isRawBase(rawClassData) &&
-        isRawItemBase(rawClassData) &&
-        isRawAmmoItem(rawClassData)
-    );
-
-    return parseAmmoItem(rawClassData);
-  });
 }
 
 /**
