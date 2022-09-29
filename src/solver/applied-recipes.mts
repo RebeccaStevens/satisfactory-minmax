@@ -23,8 +23,9 @@ import type {
   SinkRecipe,
 } from "src/data/game/recipes/types.mjs";
 import { RecipeType } from "src/data/game/recipes/types.mjs";
-import type { Data } from "src/data/types.mjs";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
+import type { Data } from "src/data/types.mjs";
+import type { Immutable } from "src/immutable-types.mjs";
 import { isNotNull, transpose } from "src/utils.mjs";
 
 import {
@@ -38,7 +39,7 @@ import {
  * Get all the recipes once applied to the possible machines.
  */
 export function getAppliedRecipes(
-  data: Data
+  data: Immutable<Data>
 ): Map<AppliedRecipe["id"], AppliedRecipe> {
   return new Map(
     pipe(
@@ -107,8 +108,8 @@ export function getAppliedRecipes(
  * The all the sink recipes applied to the possible machines.
  */
 function getAppliedSinkRecipes(
-  recipe: SinkRecipe,
-  machine: Machine
+  recipe: Immutable<SinkRecipe>,
+  machine: Immutable<Machine>
 ): Array<[AppliedSinkRecipe["id"], AppliedSinkRecipe]> {
   const overclock = 1;
   const efficiencyMultiplier = 1;
@@ -133,9 +134,9 @@ function getAppliedSinkRecipes(
  * The all the resource node extraction recipes applied to the possible machines.
  */
 function getAppliedResourceNodeRecipes(
-  recipe: ResourceNodeRecipe,
-  machine: NodeExtractingMachine,
-  data: Data
+  recipe: Immutable<ResourceNodeRecipe>,
+  machine: Immutable<NodeExtractingMachine>,
+  data: Immutable<Data>
 ): Array<[AppliedResourceNodeRecipe["id"], AppliedResourceNodeRecipe]> {
   return [
     ...pipe(
@@ -181,9 +182,9 @@ function getAppliedResourceNodeRecipes(
  * The all the geothermal power recipes applied to the possible machines.
  */
 function getAppliedGeothermalPowerRecipes(
-  recipe: GeothermalPowerRecipe,
-  machine: VariablePowerProducingMachine,
-  data: Data
+  recipe: Immutable<GeothermalPowerRecipe>,
+  machine: Immutable<VariablePowerProducingMachine>,
+  data: Immutable<Data>
 ): Array<[AppliedGeothermalPowerRecipe["id"], AppliedGeothermalPowerRecipe]> {
   return [
     ...pipe(
@@ -230,11 +231,13 @@ function getAppliedGeothermalPowerRecipes(
  * The all the water pump recipes applied to the possible machines.
  */
 function getAppliedWaterPumpRecipes(
-  recipe: ResourceNodeRecipe,
-  machine: NodeExtractingMachine & {
-    extractorType: ResourceNodeExtractorType.WATER;
-  },
-  data: Data
+  recipe: Immutable<ResourceNodeRecipe>,
+  machine: Immutable<
+    NodeExtractingMachine & {
+      extractorType: ResourceNodeExtractorType.WATER;
+    }
+  >,
+  data: Immutable<Data>
 ): Array<[AppliedResourceNodeRecipe["id"], AppliedResourceNodeRecipe]> {
   const overclock = 1;
   const purity = data.purities.get("impure");
@@ -263,9 +266,9 @@ function getAppliedWaterPumpRecipes(
  * The all the resource well extraction recipes applied to the possible machines.
  */
 function getAppliedResourceWellRecipes(
-  recipe: ResourceWellRecipe,
-  machine: FrackingActivatorMachine,
-  data: Data
+  recipe: Immutable<ResourceWellRecipe>,
+  machine: Immutable<FrackingActivatorMachine>,
+  data: Immutable<Data>
 ): Array<[AppliedResourceWellRecipe["id"], AppliedResourceWellRecipe]> {
   assert(recipe.productAmounts.size === 1);
   const resource = [...recipe.productAmounts.keys()][0];
@@ -316,8 +319,8 @@ function getAppliedResourceWellRecipes(
  * The all the part recipes applied to the possible machines.
  */
 function getAppliedPartRecipes(
-  recipe: PartRecipe,
-  machine: Machine
+  recipe: Immutable<PartRecipe>,
+  machine: Immutable<Machine>
 ): Array<[AppliedRecipeBase["id"], AppliedRecipeBase]> {
   const overclock = machine.id === "machine_particle_accelerator" ? 0.5 : 1;
   const efficiencyMultiplier = 1;

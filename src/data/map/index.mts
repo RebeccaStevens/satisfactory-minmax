@@ -8,7 +8,7 @@ import {
   type ResourceItem,
   ItemType,
 } from "src/data/game/items/types.mjs";
-import type { ImmutableMap } from "src/immutable-types.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 import { isNotNull, isObject } from "src/utils.mjs";
 
 import type {
@@ -59,7 +59,7 @@ function parsePurities(): Purities {
  */
 function parseResourceNodes(
   itemsById: ImmutableMap<string, Item>,
-  purities: Purities
+  purities: Immutable<Purities>
 ): Map<ResourceItem, ResourceNodes> {
   return new Map(
     Object.entries(mapJsonData.resources.nodes)
@@ -87,7 +87,7 @@ function parseResourceNodes(
  */
 function parseResourceWells(
   itemsById: ImmutableMap<string, Item>,
-  purities: Purities
+  purities: Immutable<Purities>
 ): Map<ResourceItem, Set<ResourceWell>> {
   return new Map(
     Object.entries(mapJsonData.resources.wells).map(
@@ -144,7 +144,7 @@ function parseResourceWells(
 /**
  * Get all the geysers types and how many of each exist.
  */
-function parseGeysers(purities: Purities): Geysers {
+function parseGeysers(purities: Immutable<Purities>): Geysers {
   return getAmounts(mapJsonData.geysers, purities);
 }
 
@@ -152,8 +152,8 @@ function parseGeysers(purities: Purities): Geysers {
  * Get the purity amounts.
  */
 function getAmounts(
-  rawPurities: Readonly<Record<string, number>>,
-  purities: Purities
+  rawPurities: Immutable<Record<string, number>>,
+  purities: Immutable<Purities>
 ) {
   return new Map(
     Object.entries(rawPurities).map(([purityId, amount]) => {

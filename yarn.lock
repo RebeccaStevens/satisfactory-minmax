@@ -729,9 +729,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rebeccastevens/eslint-config@npm:^1.4.1":
-  version: 1.4.1
-  resolution: "@rebeccastevens/eslint-config@npm:1.4.1"
+"@rebeccastevens/eslint-config@npm:^1.4.3":
+  version: 1.4.3
+  resolution: "@rebeccastevens/eslint-config@npm:1.4.3"
   dependencies:
     deepmerge-ts: ^4.0.0
   peerDependencies:
@@ -750,7 +750,7 @@ __metadata:
     eslint-plugin-sonarjs: "*"
     eslint-plugin-tsdoc: "*"
     eslint-plugin-unicorn: "*"
-  checksum: 82357ed707c1e828bfc77e349f271964ef8da35fea1eff8cf055c994552a760634380a7d9e0f17fb3d2ef2a90e855f348ff1fa3326a81a8a84116db1b8c1de06
+  checksum: 135968c15fc1d00594dc9cd9190daee7bc9ae5ef72edcfb9be8807d109f788e69da78f1c5f37ef58c4ee4079c6c34095c9676fe965eeea9409b5b9a67049a690
   languageName: node
   linkType: hard
 
@@ -2587,9 +2587,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-functional@npm:^5.0.0-beta.5":
-  version: 5.0.0-beta.5
-  resolution: "eslint-plugin-functional@npm:5.0.0-beta.5"
+"eslint-plugin-functional@npm:^5.0.0-beta.6":
+  version: 5.0.0-beta.6
+  resolution: "eslint-plugin-functional@npm:5.0.0-beta.6"
   dependencies:
     "@typescript-eslint/utils": ^5.10.2
     deepmerge-ts: ^4.0.3
@@ -2605,7 +2605,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 1d74278748902f200de867d2924d0da3c33d8ecee8148aeb86252ef7c8c46bd4a12fa798d69a9f65d6adf5c14546a2e9b031c15fc6b7cefb46a02df23967024a
+  checksum: c3df0e8b633c55acea9a64b3b307b101ad7daf444c20de1f120f2bcd5b90fd90c6203b2ea45df55031e6f818629165fc87919e71192854f2fac4507a5446f0b6
   languageName: node
   linkType: hard
 
@@ -5396,7 +5396,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
-    "@rebeccastevens/eslint-config": ^1.4.1
+    "@rebeccastevens/eslint-config": ^1.4.3
     "@types/fs-extra": ^9.0.13
     "@types/node": ^17.0.38
     "@typescript-eslint/eslint-plugin": ^5.36.1
@@ -5410,7 +5410,7 @@ __metadata:
     eslint-import-resolver-typescript: ^3.5.1
     eslint-plugin-ava: ^13.2.0
     eslint-plugin-eslint-comments: ^3.2.0
-    eslint-plugin-functional: ^5.0.0-beta.5
+    eslint-plugin-functional: ^5.0.0-beta.6
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsdoc: ^39.3.6
     eslint-plugin-markdown: ^3.0.0
@@ -5430,6 +5430,7 @@ __metadata:
     prettier: ^2.7.1
     rimraf: ^3.0.2
     tslib: ^2.4.0
+    type-fest: ^3.0.0
     typescript: ^4.8.4
   languageName: unknown
   linkType: soft
@@ -5999,6 +6000,13 @@ __metadata:
   version: 0.8.1
   resolution: "type-fest@npm:0.8.1"
   checksum: d61c4b2eba24009033ae4500d7d818a94fd6d1b481a8111612ee141400d5f1db46f199c014766b9fa9b31a6a7374d96fc748c6d688a78a3ce5a33123839becb7
+  languageName: node
+  linkType: hard
+
+"type-fest@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "type-fest@npm:3.0.0"
+  checksum: 04c00bb3db91d7b98cddb948840926e5703384fb240550a2f1a152cf0781e293efd7001bb013ad84bd7b388cdb052bb6445afdc2d2be8f5529e3bc0ba03bb938
   languageName: node
   linkType: hard
 

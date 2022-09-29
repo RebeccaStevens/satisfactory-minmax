@@ -5,7 +5,7 @@ import { pipe, filter, map } from "iter-ops";
 import { TransferType } from "src/data/game/items/types.mjs";
 import type { AppliedRecipe, Data, Item } from "src/data/index.mjs";
 import { RecipeType } from "src/data/index.mjs";
-import type { ImmutableMap } from "src/immutable-types.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 import { getRecipeProductionRate } from "src/solver/utils.mjs";
 import { isNotNull } from "src/utils.mjs";
 
@@ -13,8 +13,8 @@ import { isNotNull } from "src/utils.mjs";
  * Analyse the results.
  */
 export function analyseResult(
-  result: HighsSolution,
-  data: Data,
+  result: Immutable<HighsSolution>,
+  data: Immutable<Data>,
   appliedRecipes: ImmutableMap<string, AppliedRecipe>
 ) {
   if (result.Status !== "Optimal") {
@@ -23,7 +23,7 @@ export function analyseResult(
 
   const recipeCounts = new Map(
     Object.entries(result.Columns).map(
-      ([key, value]: readonly [string, unknown]) => {
+      ([key, value]: Immutable<[string, unknown]>) => {
         assert(Object.hasOwn(value, "Primal"));
         assert(typeof value.Primal === "number");
         assert(Number.isFinite(value.Primal));
@@ -138,7 +138,7 @@ export function analyseResult(
  * Get the item rate for the given recipe.
  */
 function getItemRateForRecipes(
-  recipe: AppliedRecipe,
+  recipe: Immutable<AppliedRecipe>,
   recipeCounts: ImmutableMap<string, number>,
   itemAmount: number
 ) {
@@ -149,6 +149,6 @@ function getItemRateForRecipes(
 /**
  * Transform units of rates to units the game UI uses.
  */
-function getAdjustedRate(item: Item, rate: number) {
+function getAdjustedRate(item: Immutable<Item>, rate: number) {
   return item.transferType === TransferType.PIPE ? rate / 1000 : rate;
 }

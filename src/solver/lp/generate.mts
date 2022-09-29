@@ -4,7 +4,11 @@ import { snakeCase } from "change-case";
 import { pipe, filter, map, spread, reduce, concat } from "iter-ops";
 import { RecipeType } from "src/data/index.mjs";
 import type { Item, AppliedRecipe, Data, Purity } from "src/data/index.mjs";
-import type { ImmutableMap, ImmutableSet } from "src/immutable-types.mjs";
+import type {
+  Immutable,
+  ImmutableMap,
+  ImmutableSet,
+} from "src/immutable-types.mjs";
 import {
   getRecipesByInputItem,
   getRecipesByOutputItem,
@@ -16,9 +20,9 @@ import { isNotNull } from "src/utils.mjs";
  * Generate the linear problem.
  */
 export function generateLp(
-  data: Data,
+  data: Immutable<Data>,
   recipes: ImmutableMap<AppliedRecipe["id"], AppliedRecipe>,
-  itemToMax: Item,
+  itemToMax: Immutable<Item>,
   excessPower = 0,
   excessItems?: ImmutableMap<Item, number>
 ) {
@@ -280,7 +284,7 @@ function getRecipePurityConstrants(
  * Get the input and output amounts for the given item by it's applied recipes
  */
 function getItemIoAmountForItemByAppliedRecipe(
-  item: Item,
+  item: Immutable<Item>,
   appliedRecipesByInputItem: ImmutableMap<Item, ImmutableSet<AppliedRecipe>>,
   appliedRecipesByOutputItem: ImmutableMap<Item, ImmutableSet<AppliedRecipe>>
 ) {
@@ -307,7 +311,7 @@ function getItemIoAmountForItemByAppliedRecipe(
  */
 function getIngredientAmountsForItemByRecipe(
   itemAppliedRecipes: ImmutableSet<AppliedRecipe>,
-  item: Item
+  item: Immutable<Item>
 ) {
   return new Map(
     pipe(
@@ -326,7 +330,7 @@ function getIngredientAmountsForItemByRecipe(
  */
 function getProductAmountsForItemByRecipe(
   itemAppliedRecipes: ImmutableSet<AppliedRecipe>,
-  item: Item
+  item: Immutable<Item>
 ) {
   return new Map(
     pipe(

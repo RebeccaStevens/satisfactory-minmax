@@ -13,7 +13,7 @@ import type { AppliedRecipe, Recipe } from "src/data/game/recipes/types.mjs";
 import { RecipeType } from "src/data/game/recipes/types.mjs";
 import type { ResourceWell } from "src/data/map/types.mjs";
 import { getMaxTransferRate } from "src/data/map/utils.mjs";
-import type { ImmutableMap } from "src/immutable-types.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 
 /**
  * Get all the recipes that have the given item as an input.
@@ -69,7 +69,7 @@ export function getRecipesByOutputItem<T extends AppliedRecipe>(
  * Get the production rate of an applied recipe.
  */
 export function getRecipeProductionRate(
-  recipe: AppliedRecipe,
+  recipe: Immutable<AppliedRecipe>,
   perXSeconds = 60
 ) {
   return (
@@ -93,8 +93,8 @@ export function getRecipeProductionRate(
  * A negative return value implies the machine will consumed that much power.
  */
 export function getNetEnergyRate(
-  recipe: Recipe,
-  machine: Machine,
+  recipe: Immutable<Recipe>,
+  machine: Immutable<Machine>,
   overclock = 1,
   powerProductionMultiplier = 1,
   perXSeconds = 60
@@ -124,12 +124,14 @@ export function getNetEnergyRate(
  * machine to the produce maximum output.
  */
 export function getMaxEffectiveOverclock(
-  recipe: Recipe,
-  machine: Exclude<
-    Machine,
-    | FrackingActivatorMachine
-    | PowerProducingMachine
-    | VariablePowerProducingMachine
+  recipe: Immutable<Recipe>,
+  machine: Immutable<
+    Exclude<
+      Machine,
+      | FrackingActivatorMachine
+      | PowerProducingMachine
+      | VariablePowerProducingMachine
+    >
   >,
   productionMultiplier = 1
 ) {
@@ -169,9 +171,9 @@ export function getMaxEffectiveOverclock(
  * fracking activator machine to produce the maximum output.
  */
 export function getMaxEffectiveWellOverclock(
-  recipe: Recipe,
-  machine: FrackingActivatorMachine,
-  resourceWell: ResourceWell
+  recipe: Immutable<Recipe>,
+  machine: Immutable<FrackingActivatorMachine>,
+  resourceWell: Immutable<ResourceWell>
 ) {
   return pipe(
     resourceWell.satellites,

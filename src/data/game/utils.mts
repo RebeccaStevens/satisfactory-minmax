@@ -1,6 +1,7 @@
 import { snakeCase } from "change-case";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import type { Ided, Named } from "src/data/types.mjs";
+import type { Immutable } from "src/immutable-types.mjs";
 
 import type { ResourceItem } from "./items/types.mjs";
 import type { RawBase } from "./raw-types.mjs";
@@ -59,7 +60,7 @@ export function getSimpleInternalClassName(internalClassName: string) {
  * Get the node extractor type needed for the given resource.
  */
 export function getResourceNodeExtractorType(
-  resource: ResourceItem | null
+  resource: Immutable<ResourceItem> | null
 ): ResourceNodeExtractorType | null {
   return resource === null
     ? null

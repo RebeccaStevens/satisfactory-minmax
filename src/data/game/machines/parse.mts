@@ -11,7 +11,11 @@ import { RecipeType } from "src/data/game/recipes/types.mjs";
 import { parseBase } from "src/data/game/utils.mjs";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import { getMaxBeltTransferRate } from "src/data/map/utils.mjs";
-import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
+import type {
+  Immutable,
+  ImmutableArray,
+  ImmutableMap,
+} from "src/immutable-types.mjs";
 import { assertNotUndefined, isNotNull, isObject } from "src/utils.mjs";
 
 import {
@@ -590,7 +594,7 @@ function parsePowerProducingMachines(
  * Parse the data for a power producing machine.
  */
 function parsePowerProducingMachine(
-  rawData: RawPowerProducingMachine,
+  rawData: Immutable<RawPowerProducingMachine>,
   itemsByInternalClassName: ImmutableMap<string, Item>
 ): [string, PowerProducingMachine] {
   const base = parseBasePowerProducingMachine(
@@ -695,7 +699,7 @@ function parseVariablePowerProducingMachines(rawData: ImmutableArray<unknown>) {
  * Parse the data for a variable power producing machine.
  */
 function parseVariablePowerProducingMachine(
-  rawData: RawVariablePowerProducingMachine
+  rawData: Immutable<RawVariablePowerProducingMachine>
 ): [string, VariablePowerProducingMachine] {
   const base = parseBasePowerProducingMachine(
     rawData,
