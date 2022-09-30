@@ -34,7 +34,7 @@ export async function loadLp(
 ) {
   if (useCache) {
     const cachedLp = await fs
-      .readFile(cachedLpFile, { encoding: "utf-8" })
+      .readFile(cachedLpFile, { encoding: "utf8" })
       .catch(() => null);
 
     if (cachedLp !== null) {
@@ -49,7 +49,7 @@ export async function loadLp(
   console.log("Caching LP");
   void fsExtra
     .ensureDir(cacheDir)
-    .then(() => fs.writeFile(cachedLpFile, lp, { encoding: "utf-8" }))
+    .then(() => fs.writeFile(cachedLpFile, lp, { encoding: "utf8" }))
     .catch(() => {
       console.warn("Failed to cache LP.");
     });
