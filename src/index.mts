@@ -1,7 +1,7 @@
 import assert from "node:assert";
 
 import { analyseResult } from "src/analyse/index.mjs";
-import type { ImmutableItem } from "src/data/index.mjs";
+import type { Item } from "src/data/index.mjs";
 import { loadData } from "src/data/index.mjs";
 import { runSolver } from "src/solver/index.mjs";
 
@@ -32,7 +32,7 @@ const { appliedRecipes, lpSolution } = await runSolver(
   data,
   itemToMax,
   excessPower,
-  excessItems as Map<ImmutableItem, number>
+  excessItems as Map<Item, number>
 );
 
 analyseResult(lpSolution, data, appliedRecipes);

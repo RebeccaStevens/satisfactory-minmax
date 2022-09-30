@@ -1,3 +1,5 @@
+export type { ReadonlyDeep as Immutable } from "type-fest";
+
 /**
  * The same as `Readonly` but works with arrays.
  */

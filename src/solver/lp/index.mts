@@ -2,12 +2,8 @@ import { promises as fs } from "node:fs";
 
 import * as fsExtra from "fs-extra";
 import highsLoader from "highs";
-import type {
-  ImmutableItem,
-  ImmutableAppliedRecipe,
-  ImmutableData,
-} from "src/data/index.mjs";
-import type { ImmutableMap } from "src/immutable-types.mjs";
+import type { Item, AppliedRecipe, Data } from "src/data/index.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 import { cacheDir, cachedLpFile } from "src/solver/constants.mjs";
 
 import { generateLp } from "./generate.mjs";
@@ -29,11 +25,11 @@ export async function solveLp(lp: string) {
  * Load the linear problem.
  */
 export async function loadLp(
-  data: ImmutableData,
-  recipes: ImmutableMap<ImmutableAppliedRecipe["id"], ImmutableAppliedRecipe>,
-  itemToMax: ImmutableItem,
+  data: Immutable<Data>,
+  recipes: ImmutableMap<AppliedRecipe["id"], AppliedRecipe>,
+  itemToMax: Immutable<Item>,
   excessPower = 0,
-  excessItems?: ImmutableMap<ImmutableItem, number>,
+  excessItems?: ImmutableMap<Item, number>,
   useCache = false
 ) {
   if (useCache) {

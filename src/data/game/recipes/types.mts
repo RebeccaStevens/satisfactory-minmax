@@ -1,18 +1,13 @@
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
-import type { ImmutableMachine } from "src/data/game/machines/immutable-types.mjs";
-import type {
-  ImmutablePurity,
-  ImmutableResourceWell,
-} from "src/data/map/immutable-types.mjs";
+import type { Item } from "src/data/game/items/types.mjs";
+import type { Machine } from "src/data/game/machines/types.mjs";
+import type { Purity, ResourceWell } from "src/data/map/types.mjs";
 import type { Ided, Named } from "src/data/types.mjs";
-
-import type { ImmutableItemAmount } from "./immutable-types.mjs";
 
 /**
  * An amount of a specific item.
  */
 export type ItemAmount = {
-  item: ImmutableItem;
+  item: Item;
   amount: number;
 };
 
@@ -41,10 +36,10 @@ export type RecipeBase = Ided &
   Named & {
     recipeType: RecipeType;
     alternate: boolean;
-    ingredientAmounts: Map<ImmutableItem, ImmutableItemAmount>;
-    productAmounts: Map<ImmutableItem, ImmutableItemAmount>;
+    ingredientAmounts: Map<Item, ItemAmount>;
+    productAmounts: Map<Item, ItemAmount>;
     duration: number;
-    canBeProducedIn: Set<ImmutableMachine>;
+    canBeProducedIn: Set<Machine>;
     variablePowerConsumptionConstant: number;
     variablePowerConsumptionFactor: number;
   };
@@ -99,7 +94,7 @@ export type AppliedRecipe =
 export type AppliedRecipeBase = Omit<RecipeBase, "canBeProducedIn"> & {
   recipeType: RecipeType;
   overclock: number;
-  machine: ImmutableMachine;
+  machine: Machine;
   efficiencyMultiplier: number;
   netPower: number;
 };
@@ -116,7 +111,7 @@ export type AppliedPartRecipe = AppliedRecipeBase & {
  */
 export type AppliedResourceNodeRecipe = AppliedRecipeBase & {
   recipeType: ResourceNodeRecipe["recipeType"];
-  purity: ImmutablePurity;
+  purity: Purity;
 };
 
 /**
@@ -124,7 +119,7 @@ export type AppliedResourceNodeRecipe = AppliedRecipeBase & {
  */
 export type AppliedGeothermalPowerRecipe = AppliedRecipeBase & {
   recipeType: GeothermalPowerRecipe["recipeType"];
-  purity: ImmutablePurity;
+  purity: Purity;
 };
 
 /**
@@ -132,7 +127,7 @@ export type AppliedGeothermalPowerRecipe = AppliedRecipeBase & {
  */
 export type AppliedResourceWellRecipe = AppliedRecipeBase & {
   recipeType: ResourceWellRecipe["recipeType"];
-  resourceWell: ImmutableResourceWell;
+  resourceWell: ResourceWell;
 };
 
 /**

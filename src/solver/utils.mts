@@ -1,34 +1,31 @@
 import assert from "node:assert";
 
 import { pipe, filter, map, reduce } from "iter-ops";
-import type { ImmutableItem } from "src/data/game/items/immutable-types.mjs";
+import type { Item } from "src/data/game/items/types.mjs";
 import type {
-  ImmutableFrackingActivatorMachine,
-  ImmutableMachine,
-  ImmutablePowerProducingMachine,
-  ImmutableVariablePowerProducingMachine,
-} from "src/data/game/machines/immutable-types.mjs";
+  FrackingActivatorMachine,
+  Machine,
+  PowerProducingMachine,
+  VariablePowerProducingMachine,
+} from "src/data/game/machines/types.mjs";
 import { MachineType } from "src/data/game/machines/types.mjs";
-import type {
-  ImmutableAppliedRecipe,
-  ImmutableRecipe,
-} from "src/data/game/recipes/immutable-types.mjs";
+import type { AppliedRecipe, Recipe } from "src/data/game/recipes/types.mjs";
 import { RecipeType } from "src/data/game/recipes/types.mjs";
-import type { ImmutableResourceWell } from "src/data/map/immutable-types.mjs";
+import type { ResourceWell } from "src/data/map/types.mjs";
 import { getMaxTransferRate } from "src/data/map/utils.mjs";
-import type { ImmutableMap } from "src/immutable-types.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 
 /**
  * Get all the recipes that have the given item as an input.
  */
-export function getRecipesByInputItem<T extends ImmutableAppliedRecipe>(
+export function getRecipesByInputItem<T extends AppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
-  items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
+  items: ImmutableMap<Item["id"], Item>
 ) {
   return new Map(
     pipe(
       items.values(),
-      map((item): [ImmutableItem, Set<T>] => {
+      map((item): [Item, Set<T>] => {
         const itemRecipes = new Set(
           pipe(
             recipes.values(),
@@ -45,14 +42,14 @@ export function getRecipesByInputItem<T extends ImmutableAppliedRecipe>(
 /**
  * Get all the recipes that have the given item as an output.
  */
-export function getRecipesByOutputItem<T extends ImmutableAppliedRecipe>(
+export function getRecipesByOutputItem<T extends AppliedRecipe>(
   recipes: ImmutableMap<T["id"], T>,
-  items: ImmutableMap<ImmutableItem["id"], ImmutableItem>
+  items: ImmutableMap<Item["id"], Item>
 ) {
   return new Map(
     pipe(
       items.values(),
-      map((item): [ImmutableItem, Set<T>] => {
+      map((item): [Item, Set<T>] => {
         const itemRecipes = new Set(
           pipe(
             recipes.values(),
@@ -72,7 +69,7 @@ export function getRecipesByOutputItem<T extends ImmutableAppliedRecipe>(
  * Get the production rate of an applied recipe.
  */
 export function getRecipeProductionRate(
-  recipe: ImmutableAppliedRecipe,
+  recipe: Immutable<AppliedRecipe>,
   perXSeconds = 60
 ) {
   return (
@@ -96,8 +93,8 @@ export function getRecipeProductionRate(
  * A negative return value implies the machine will consumed that much power.
  */
 export function getNetEnergyRate(
-  recipe: ImmutableRecipe,
-  machine: ImmutableMachine,
+  recipe: Immutable<Recipe>,
+  machine: Immutable<Machine>,
   overclock = 1,
   powerProductionMultiplier = 1,
   perXSeconds = 60
@@ -127,12 +124,14 @@ export function getNetEnergyRate(
  * machine to the produce maximum output.
  */
 export function getMaxEffectiveOverclock(
-  recipe: ImmutableRecipe,
-  machine: Exclude<
-    ImmutableMachine,
-    | ImmutableFrackingActivatorMachine
-    | ImmutablePowerProducingMachine
-    | ImmutableVariablePowerProducingMachine
+  recipe: Immutable<Recipe>,
+  machine: Immutable<
+    Exclude<
+      Machine,
+      | FrackingActivatorMachine
+      | PowerProducingMachine
+      | VariablePowerProducingMachine
+    >
   >,
   productionMultiplier = 1
 ) {
@@ -172,9 +171,9 @@ export function getMaxEffectiveOverclock(
  * fracking activator machine to produce the maximum output.
  */
 export function getMaxEffectiveWellOverclock(
-  recipe: ImmutableRecipe,
-  machine: ImmutableFrackingActivatorMachine,
-  resourceWell: ImmutableResourceWell
+  recipe: Immutable<Recipe>,
+  machine: Immutable<FrackingActivatorMachine>,
+  resourceWell: Immutable<ResourceWell>
 ) {
   return pipe(
     resourceWell.satellites,
