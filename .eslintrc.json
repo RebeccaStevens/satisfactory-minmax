@@ -28,11 +28,13 @@
   ],
   "rules": {
     "import/no-unresolved": "off",
-    "functional/prefer-immutable-parameter-types": [
+    "functional/prefer-immutable-types": [
       "error",
       {
-        "enforcement": "Immutable",
-        "ignoreInferredTypes": true
+        "parameter": {
+          "enforcement": "Immutable",
+          "ignoreInferredTypes": true
+        }
       }
     ]
   },

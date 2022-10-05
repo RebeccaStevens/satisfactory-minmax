@@ -2587,14 +2587,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-functional@npm:^5.0.0-beta.6":
-  version: 5.0.0-beta.6
-  resolution: "eslint-plugin-functional@npm:5.0.0-beta.6"
+"eslint-plugin-functional@npm:^5.0.0-beta.8":
+  version: 5.0.0-beta.8
+  resolution: "eslint-plugin-functional@npm:5.0.0-beta.8"
   dependencies:
     "@typescript-eslint/utils": ^5.10.2
     deepmerge-ts: ^4.0.3
     escape-string-regexp: ^4.0.0
-    is-immutable-type: ^1.0.0
+    is-immutable-type: ^1.0.2
     semver: ^7.3.7
   peerDependencies:
     eslint: ^8.0.0
@@ -2605,7 +2605,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: c3df0e8b633c55acea9a64b3b307b101ad7daf444c20de1f120f2bcd5b90fd90c6203b2ea45df55031e6f818629165fc87919e71192854f2fac4507a5446f0b6
+  checksum: 433cfd63531a2d09debc5a87562082fdea803b3c03c8793171ba832471cba0725392502dc8117fdc128e4ed4a962ac776944e6614bac469585aea15fdf0836b6
   languageName: node
   linkType: hard
 
@@ -3874,15 +3874,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-immutable-type@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "is-immutable-type@npm:1.0.0"
+"is-immutable-type@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "is-immutable-type@npm:1.0.2"
   peerDependencies:
     "@typescript-eslint/type-utils": ">=5.30.5"
     "@typescript-eslint/utils": ">=5.30.5"
     tsutils: ">=3.21.0"
     typescript: ">=4.7.4"
-  checksum: 926ebe7ea969d7b08723a01cf91aada6a48a18062fc218d9e84c825df1241bb0ee761f2d138121d64c6367b02b8067f57600d4ef5f79c4a7b2fbd0e3b84573fd
+  checksum: a994a451b7b6decb521da67ca2e2a0841d3d95516565d6b3e6f252eba38faafcece9cbedf37f1a4598d1e2b28159566c50e32a28cec0e92482da8516fe79d395
   languageName: node
   linkType: hard
 
@@ -5410,7 +5410,7 @@ __metadata:
     eslint-import-resolver-typescript: ^3.5.1
     eslint-plugin-ava: ^13.2.0
     eslint-plugin-eslint-comments: ^3.2.0
-    eslint-plugin-functional: ^5.0.0-beta.6
+    eslint-plugin-functional: ^5.0.0-beta.8
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsdoc: ^39.3.6
     eslint-plugin-markdown: ^3.0.0
