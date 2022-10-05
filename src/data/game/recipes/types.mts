@@ -85,6 +85,7 @@ export type SinkRecipe = RecipeBase & {
 export type AppliedRecipe =
   | AppliedResourceNodeRecipe
   | AppliedResourceWellRecipe
+  | AppliedGeothermalPowerRecipe
   | AppliedSinkRecipe
   | AppliedPartRecipe;
 
