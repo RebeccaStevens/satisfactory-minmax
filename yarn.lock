@@ -729,9 +729,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rebeccastevens/eslint-config@npm:^1.4.3":
-  version: 1.4.3
-  resolution: "@rebeccastevens/eslint-config@npm:1.4.3"
+"@rebeccastevens/eslint-config@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@rebeccastevens/eslint-config@npm:1.4.4"
   dependencies:
     deepmerge-ts: ^4.0.0
   peerDependencies:
@@ -740,7 +740,7 @@ __metadata:
     eslint: ">=8.0.0"
     eslint-import-resolver-typescript: "*"
     eslint-plugin-eslint-comments: "*"
-    eslint-plugin-functional: "*"
+    eslint-plugin-functional: ">=5.0.0"
     eslint-plugin-import: "*"
     eslint-plugin-jsdoc: "*"
     eslint-plugin-markdown: "*"
@@ -750,7 +750,7 @@ __metadata:
     eslint-plugin-sonarjs: "*"
     eslint-plugin-tsdoc: "*"
     eslint-plugin-unicorn: "*"
-  checksum: 135968c15fc1d00594dc9cd9190daee7bc9ae5ef72edcfb9be8807d109f788e69da78f1c5f37ef58c4ee4079c6c34095c9676fe965eeea9409b5b9a67049a690
+  checksum: 14f980463dda41db41308702486c1770ab2d9b041b4358a96309b4a9a2bcc25e6b33d29f5478a6638415b8f94433417c62c640e75220f3568a9ce03e5249b5b2
   languageName: node
   linkType: hard
 
@@ -4041,10 +4041,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iter-ops@npm:^2.0.0-beta.1":
-  version: 2.0.0-beta.1
-  resolution: "iter-ops@npm:2.0.0-beta.1"
-  checksum: f643584a3620fb8a1e962e2ab35ec2ef9f4768385909e528b2f74dd4bf6a0c8e22bb2b5d35f4f25bcc28127f125cbb1ead67da23b39bc177ea73b4088ab0775f
+"iter-ops@npm:^2.0.0-beta.4":
+  version: 2.0.0-beta.4
+  resolution: "iter-ops@npm:2.0.0-beta.4"
+  checksum: b620bfc26242b9e516fb76033d5ced5b3a4872bfeb9e669dcb091daeea146cf1f3e22f9f10ccfd0f5f2d0ae20619ee0acc62f38dee786630dba34ded62574a6d
   languageName: node
   linkType: hard
 
@@ -5396,7 +5396,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
-    "@rebeccastevens/eslint-config": ^1.4.3
+    "@rebeccastevens/eslint-config": ^1.4.4
     "@types/fs-extra": ^9.0.13
     "@types/node": ^17.0.38
     "@typescript-eslint/eslint-plugin": ^5.36.1
@@ -5423,7 +5423,7 @@ __metadata:
     fs-extra: ^10.1.0
     highs: ^0.7.2
     husky: ^8.0.1
-    iter-ops: ^2.0.0-beta.1
+    iter-ops: ^2.0.0-beta.4
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
     marked: ^4.1.0
