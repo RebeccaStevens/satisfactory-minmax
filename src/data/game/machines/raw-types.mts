@@ -1,15 +1,14 @@
 import type { RawBase } from "src/data/game/raw-types.mjs";
 
-export type RawMachineBase = RawBase &
-  Readonly<{
-    mManufacturingSpeed: string;
-    mPowerConsumption: string;
-    mPowerConsumptionExponent: string;
-    mCanChangePotential: string;
-    mMinPotential: string;
-    mMaxPotential: string;
-    mMaxPotentialIncreasePerCrystal: string;
-  }>;
+export type RawMachineBase = RawBase & {
+  mManufacturingSpeed: string;
+  mPowerConsumption: string;
+  mPowerConsumptionExponent: string;
+  mCanChangePotential: string;
+  mMinPotential: string;
+  mMaxPotential: string;
+  mMaxPotentialIncreasePerCrystal: string;
+};
 
 /**
  * Typeguard for raw machine base data.
@@ -31,10 +30,9 @@ export function isRawMachineBase<T extends RawBase>(
   );
 }
 
-export type RawManufacturingMachine = RawMachineBase &
-  Readonly<{
-    mManufacturingSpeed: string;
-  }>;
+export type RawManufacturingMachine = RawMachineBase & {
+  mManufacturingSpeed: string;
+};
 
 /**
  * Typeguard for raw manufacturing machine data.
@@ -48,11 +46,10 @@ export function isRawManufacturingMachine<T extends RawMachineBase>(
   );
 }
 
-export type RawManufacturingVariablePowerMachine = RawManufacturingMachine &
-  Readonly<{
-    mEstimatedMininumPowerConsumption: string;
-    mEstimatedMaximumPowerConsumption: string;
-  }>;
+export type RawManufacturingVariablePowerMachine = RawManufacturingMachine & {
+  mEstimatedMininumPowerConsumption: string;
+  mEstimatedMaximumPowerConsumption: string;
+};
 
 /**
  * Typeguard for raw variable power manufacturing machine data.
@@ -68,13 +65,12 @@ export function isRawManufacturingVariablePowerMachine<
   );
 }
 
-export type RawExtractingMachine = RawMachineBase &
-  Readonly<{
-    mExtractorTypeName: string;
-    mAllowedResources: string;
-    mExtractCycleTime: string;
-    mItemsPerCycle: string;
-  }>;
+export type RawExtractingMachine = RawMachineBase & {
+  mExtractorTypeName: string;
+  mAllowedResources: string;
+  mExtractCycleTime: string;
+  mItemsPerCycle: string;
+};
 
 /**
  * Typeguard for raw extracting machine data.
@@ -94,11 +90,10 @@ export function isRawExtractingMachine<T extends RawMachineBase>(
   );
 }
 
-export type RawPowerProducingMachineBase = RawMachineBase &
-  Readonly<{
-    mPowerProduction: string;
-    mPowerProductionExponent: string;
-  }>;
+export type RawPowerProducingMachineBase = RawMachineBase & {
+  mPowerProduction: string;
+  mPowerProductionExponent: string;
+};
 
 /**
  * Typeguard for raw power producing machine base data.
@@ -115,22 +110,17 @@ export function isRawPowerProducingMachineBase<T extends RawMachineBase>(
 }
 
 export type RawPowerProducingMachine = RawMachineBase &
-  RawPowerProducingMachineBase &
-  Readonly<{
-    mFuel: Readonly<
-      ReadonlyArray<
-        Readonly<{
-          mFuelClass: string;
-          mSupplementalResourceClass: string;
-          mByproduct: string;
-          mByproductAmount: string;
-        }>
-      >
-    >;
+  RawPowerProducingMachineBase & {
+    mFuel: ReadonlyArray<{
+      mFuelClass: string;
+      mSupplementalResourceClass: string;
+      mByproduct: string;
+      mByproductAmount: string;
+    }>;
     mFuelLoadAmount: string;
     mRequiresSupplementalResource: string;
     mSupplementalLoadAmount: string;
-  }>;
+  };
 
 /**
  * Typeguard for raw power producing machine data.
@@ -163,12 +153,11 @@ export function isRawPowerProducingMachine<T extends RawMachineBase>(
 }
 
 export type RawVariablePowerProducingMachine = RawPowerProducingMachine &
-  RawPowerProducingMachineBase &
-  Readonly<{
+  RawPowerProducingMachineBase & {
     mVariablePowerProductionConstant: string;
     mVariablePowerProductionFactor: string;
     mVariablePowerProductionCycleLength: string;
-  }>;
+  };
 
 /**
  * Typeguard for raw variable power producing machine data.

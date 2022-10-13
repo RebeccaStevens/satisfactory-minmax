@@ -1,14 +1,13 @@
 import type { RawBase } from "src/data/game/raw-types.mjs";
 
-export type RawRecipe = RawBase &
-  Readonly<{
-    mIngredients: string;
-    mProduct: string;
-    mManufactoringDuration: string;
-    mProducedIn: string;
-    mVariablePowerConsumptionConstant: string;
-    mVariablePowerConsumptionFactor: string;
-  }>;
+export type RawRecipe = RawBase & {
+  mIngredients: string;
+  mProduct: string;
+  mManufactoringDuration: string;
+  mProducedIn: string;
+  mVariablePowerConsumptionConstant: string;
+  mVariablePowerConsumptionFactor: string;
+};
 
 export function isRawRecipe<T extends RawBase>(
   rawData: T

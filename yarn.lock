@@ -2587,14 +2587,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-functional@npm:^5.0.0-beta.8":
-  version: 5.0.0-beta.8
-  resolution: "eslint-plugin-functional@npm:5.0.0-beta.8"
+"eslint-plugin-functional@npm:^5.0.0-beta.9":
+  version: 5.0.0-beta.9
+  resolution: "eslint-plugin-functional@npm:5.0.0-beta.9"
   dependencies:
     "@typescript-eslint/utils": ^5.10.2
     deepmerge-ts: ^4.0.3
     escape-string-regexp: ^4.0.0
-    is-immutable-type: ^1.0.2
+    is-immutable-type: ^1.1.0
     semver: ^7.3.7
   peerDependencies:
     eslint: ^8.0.0
@@ -2605,7 +2605,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 433cfd63531a2d09debc5a87562082fdea803b3c03c8793171ba832471cba0725392502dc8117fdc128e4ed4a962ac776944e6614bac469585aea15fdf0836b6
+  checksum: 1e27e6a2fcc24e906f9162ca5437a56f3a3e8f4f1ab0029c7ded50f7224c87f7fac98d5e57f469afceeb5a11e7839b380811d2b378811e3de39b634572ede11c
   languageName: node
   linkType: hard
 
@@ -3874,15 +3874,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-immutable-type@npm:^1.0.2":
-  version: 1.0.2
-  resolution: "is-immutable-type@npm:1.0.2"
+"is-immutable-type@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "is-immutable-type@npm:1.1.0"
   peerDependencies:
     "@typescript-eslint/type-utils": ">=5.30.5"
     "@typescript-eslint/utils": ">=5.30.5"
     tsutils: ">=3.21.0"
     typescript: ">=4.7.4"
-  checksum: a994a451b7b6decb521da67ca2e2a0841d3d95516565d6b3e6f252eba38faafcece9cbedf37f1a4598d1e2b28159566c50e32a28cec0e92482da8516fe79d395
+  checksum: a7f98e2de024b3d57d49b3153c5c86b6014c984ea9a035f70171b6aab5d7fbda4c4f2a735924e22ae6cc458253fd210bbc15b690e3ae2dc8c7f6c969336a7d71
   languageName: node
   linkType: hard
 
@@ -4041,10 +4041,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iter-ops@npm:^2.0.0-beta.4":
-  version: 2.0.0-beta.4
-  resolution: "iter-ops@npm:2.0.0-beta.4"
-  checksum: b620bfc26242b9e516fb76033d5ced5b3a4872bfeb9e669dcb091daeea146cf1f3e22f9f10ccfd0f5f2d0ae20619ee0acc62f38dee786630dba34ded62574a6d
+"iter-ops@npm:^2.0.0-beta.6":
+  version: 2.0.0-beta.6
+  resolution: "iter-ops@npm:2.0.0-beta.6"
+  checksum: 22affe0653964817fdf2d150e90ef53535336fcdc12bd93cf04b1bb0285914b52ca3286cf15bd7cb0b7a59b3ff590208f815264b61e02f0851a9241fc295fc24
   languageName: node
   linkType: hard
 
@@ -5410,7 +5410,7 @@ __metadata:
     eslint-import-resolver-typescript: ^3.5.1
     eslint-plugin-ava: ^13.2.0
     eslint-plugin-eslint-comments: ^3.2.0
-    eslint-plugin-functional: ^5.0.0-beta.8
+    eslint-plugin-functional: ^5.0.0-beta.9
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsdoc: ^39.3.6
     eslint-plugin-markdown: ^3.0.0
@@ -5423,7 +5423,7 @@ __metadata:
     fs-extra: ^10.1.0
     highs: ^0.7.2
     husky: ^8.0.1
-    iter-ops: ^2.0.0-beta.4
+    iter-ops: ^2.0.0-beta.6
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
     marked: ^4.1.0
@@ -6004,9 +6004,9 @@ __metadata:
   linkType: hard
 
 "type-fest@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "type-fest@npm:3.0.0"
-  checksum: 04c00bb3db91d7b98cddb948840926e5703384fb240550a2f1a152cf0781e293efd7001bb013ad84bd7b388cdb052bb6445afdc2d2be8f5529e3bc0ba03bb938
+  version: 3.1.0
+  resolution: "type-fest@npm:3.1.0"
+  checksum: 22a0402afafab05edb7b45456d6ebfdcfc616f84a98266857e89bd656a14b5007e86d1a50b12746624b6aafb17dad3f437065df8adfa1b04bb970894db1fe940
   languageName: node
   linkType: hard
 

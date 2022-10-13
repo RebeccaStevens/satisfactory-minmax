@@ -31,7 +31,8 @@
     "functional/prefer-immutable-types": [
       "error",
       {
-        "parameter": {
+        "enforcement": "None",
+        "parameters": {
           "enforcement": "Immutable",
           "ignoreInferredTypes": true
         }

@@ -1,11 +1,10 @@
 import type { RawBase } from "src/data/game/raw-types.mjs";
 
-export type RawItemBase = RawBase &
-  Readonly<{
-    mEnergyValue: string;
-    mForm: string;
-    mCanBeDiscarded: string;
-  }>;
+export type RawItemBase = RawBase & {
+  mEnergyValue: string;
+  mForm: string;
+  mCanBeDiscarded: string;
+};
 
 export function isRawItemBase<T extends RawBase>(
   rawData: T
@@ -36,10 +35,9 @@ export function isRawPartsItem<T extends RawItemBase>(
   return true;
 }
 
-export type RawResourceItem = RawItemBase &
-  Readonly<{
-    mCollectSpeedMultiplier: string;
-  }>;
+export type RawResourceItem = RawItemBase & {
+  mCollectSpeedMultiplier: string;
+};
 
 export function isRawResourceItem<T extends RawItemBase>(
   rawData: T

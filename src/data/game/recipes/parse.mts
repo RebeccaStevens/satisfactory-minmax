@@ -1,6 +1,6 @@
 import assert from "node:assert";
 
-import { pipe, filter, map, spread, every } from "iter-ops";
+import { pipe, filter, map, flatMap, every } from "iter-ops";
 import { type Item, ItemType } from "src/data/game/items/types.mjs";
 import { type Machine, MachineType } from "src/data/game/machines/types.mjs";
 import { parseRawCollection } from "src/data/game/raw-collection-parser.mjs";
@@ -10,7 +10,11 @@ import {
   getSimpleInternalClassName,
   parseBase,
 } from "src/data/game/utils.mjs";
-import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
+import type {
+  Immutable,
+  ImmutableArray,
+  ImmutableMap,
+} from "src/immutable-types.mjs";
 import { isNotNull, isObject } from "src/utils.mjs";
 
 import type { RawRecipe } from "./raw-types.mjs";
@@ -53,7 +57,7 @@ export function parseRecipes(
  * Parse a recipe out of the raw data.
  */
 function parseRecipe(
-  rawData: RawRecipe,
+  rawData: Immutable<RawRecipe>,
   machinesByInternalClassName: ImmutableMap<string, Machine>,
   itemsByInternalClassName: ImmutableMap<string, Item>
 ): Recipe {
@@ -107,7 +111,7 @@ function parseRecipe(
       rawProducedIn,
       // TODO: The solver should be what filters out manual machines.
       filter(filterOutManualMachines),
-      map((machineInternalClassName) => {
+      flatMap((machineInternalClassName) => {
         assert(typeof machineInternalClassName === "string");
 
         if (isResourceRecipe) {
@@ -140,8 +144,7 @@ function parseRecipe(
         assert(machine !== undefined);
 
         return [machine];
-      }),
-      spread()
+      })
     )
   );
 

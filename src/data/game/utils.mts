@@ -9,7 +9,10 @@ import type { RawBase } from "./raw-types.mjs";
 /**
  * Get the basics out off the given raw data element.
  */
-export function parseBase(rawData: RawBase, type: string): Ided & Named {
+export function parseBase(
+  rawData: Immutable<RawBase>,
+  type: string
+): Ided & Named {
   const id = snakeCase(`${type} ${rawData.mDisplayName}`);
   const name = rawData.mDisplayName;
 

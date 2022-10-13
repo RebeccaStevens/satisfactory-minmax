@@ -1,7 +1,7 @@
 import assert from "node:assert";
 
 import { snakeCase } from "change-case";
-import { pipe, filter, map, spread, reduce, concat } from "iter-ops";
+import { pipe, filter, flatMap, map, reduce, concat } from "iter-ops";
 import { RecipeType } from "src/data/index.mjs";
 import type { Item, AppliedRecipe, Data, Purity } from "src/data/index.mjs";
 import type {
@@ -52,8 +52,8 @@ export function generateLp(
     ),
   ].join(" + ");
 
-  type Constrant = readonly [string, string];
-  type Constrants = Readonly<Iterable<Constrant>>;
+  type Constrant = Immutable<[string, string]>;
+  type Constrants = Immutable<Iterable<Constrant>>;
 
   const recipeIoConstrants: Constrants = pipe(
     data.items.values(),
@@ -108,7 +108,7 @@ export function generateLp(
     ...pipe(
       [],
       concat(data.resourceNodes.keys(), data.resourceWells.keys()),
-      map((resource) => {
+      flatMap((resource) => {
         const itemRecipes = recipesByOutputItem.get(resource);
         if (itemRecipes === undefined || itemRecipes.size === 0) {
           return null;
@@ -120,14 +120,13 @@ export function generateLp(
           map((recipe) => recipe.id)
         );
       }),
-      spread(),
       filter(isNotNull)
     ),
   ];
 
   const nodeExtractionConstrants: Constrants = pipe(
     data.resourceNodes,
-    map(([item, nodePurities]) => {
+    flatMap(([item, nodePurities]) => {
       const itemRecipes = recipesByOutputItem.get(item);
       if (itemRecipes === undefined || itemRecipes.size === 0) {
         return null;
@@ -159,7 +158,6 @@ export function generateLp(
         })
       );
     }),
-    spread(),
     filter(isNotNull)
   );
 
@@ -187,7 +185,7 @@ export function generateLp(
 
   const wellExtractionConstrants: Constrants = pipe(
     data.resourceWells,
-    map(([item, resourceWellsForItem]) => {
+    flatMap(([item, resourceWellsForItem]) => {
       const itemRecipes = recipesByOutputItem.get(item);
       if (itemRecipes === undefined || itemRecipes.size === 0) {
         return null;
@@ -211,7 +209,6 @@ export function generateLp(
         })
       );
     }),
-    spread(),
     filter(isNotNull)
   );
 
@@ -267,9 +264,9 @@ export function generateLp(
 }
 
 function getRecipePurityConstrants(
-  recipesByPurity: Readonly<Iterable<readonly [Purity, string]>>
+  recipesByPurity: Immutable<Iterable<[Purity, string]>>
 ) {
-  return pipe<readonly [Purity, string], Map<Readonly<Purity>, string[]>>(
+  return pipe(
     recipesByPurity,
     reduce((carry, [purity, id]) => {
       const ids = carry.get(purity) ?? [];

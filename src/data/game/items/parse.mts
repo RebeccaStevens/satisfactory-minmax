@@ -2,7 +2,11 @@ import assert from "node:assert";
 
 import { isRawBase } from "src/data/game/raw-types.mjs";
 import { parseBase } from "src/data/game/utils.mjs";
-import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
+import type {
+  Immutable,
+  ImmutableArray,
+  ImmutableMap,
+} from "src/immutable-types.mjs";
 import { isObject } from "src/utils.mjs";
 
 import type {
@@ -62,10 +66,10 @@ export function parseItems(
  * Parse the base data for the item.
  */
 function parseItemBase<I extends ItemType, T extends TransferType>(
-  rawData: RawItemBase,
+  rawData: Immutable<RawItemBase>,
   itemType: I,
   transferType: T
-): ItemBase & Readonly<{ itemType: I; transferType: T }> {
+): ItemBase & { itemType: I; transferType: T } {
   const base = parseBase(rawData, "item");
 
   return {
@@ -79,9 +83,9 @@ function parseItemBase<I extends ItemType, T extends TransferType>(
  * Parse the base data for the physical item.
  */
 function parsePhysicalItemBase<Type extends PhysicalItemBase["itemType"]>(
-  rawData: RawItemBase,
+  rawData: Immutable<RawItemBase>,
   itemType: Type
-): PhysicalItemBase & Readonly<{ itemType: Type }> {
+): PhysicalItemBase & { itemType: Type } {
   assert(new Set(["RF_SOLID", "RF_LIQUID", "RF_GAS"]).has(rawData.mForm));
   const transferType =
     rawData.mForm === "RF_SOLID" ? TransferType.BELT : TransferType.PIPE;
@@ -132,7 +136,9 @@ function parseResourceItems(rawData: ImmutableArray<unknown>) {
 /**
  * Parse a resource item.
  */
-function parseResourceItem(rawData: RawResourceItem): [string, ResourceItem] {
+function parseResourceItem(
+  rawData: Immutable<RawResourceItem>
+): [string, ResourceItem] {
   const base = parsePhysicalItemBase(rawData, ItemType.RESOURCE);
 
   const collectSpeedMultiplier = Number.parseFloat(
@@ -168,7 +174,7 @@ function parseAmmoItems(rawData: ImmutableArray<unknown>) {
 /**
  * Parse an ammo item.
  */
-function parseAmmoItem(rawData: RawAmmoItem): [string, AmmoItem] {
+function parseAmmoItem(rawData: Immutable<RawAmmoItem>): [string, AmmoItem] {
   const base = parsePhysicalItemBase(rawData, ItemType.AMMO);
 
   return [rawData.ClassName, base];
@@ -193,7 +199,7 @@ function parsePartsItems(rawData: ImmutableArray<unknown>) {
 /**
  * Parse a parts item.
  */
-function parsePartsItem(rawData: RawPartItem): [string, PartItem] {
+function parsePartsItem(rawData: Immutable<RawPartItem>): [string, PartItem] {
   const base = parsePhysicalItemBase(rawData, ItemType.PART);
 
   return [rawData.ClassName, base];

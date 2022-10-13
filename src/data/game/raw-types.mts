@@ -1,7 +1,7 @@
-export type RawBase = Readonly<{
+export type RawBase = {
   ClassName: string;
   mDisplayName: string;
-}>;
+};
 
 /**
  * Typeguard for raw data class data.

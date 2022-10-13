@@ -62,7 +62,7 @@ import { MachineType } from "./types.mjs";
  */
 export function parseMachines(
   rawData: ImmutableMap<string, ImmutableArray<unknown>>,
-  items: Readonly<{
+  items: Immutable<{
     byInternalClassName: ImmutableMap<string, Item>;
     byId: ImmutableMap<Item["id"], Item>;
   }>
@@ -129,9 +129,9 @@ export function parseMachines(
  * Parse the base data for a machine.
  */
 function parseMachineBase<Type extends MachineType>(
-  rawData: RawMachineBase,
+  rawData: Immutable<RawMachineBase>,
   machineType: Type
-): MachineBase & Readonly<{ machineType: Type }> {
+): MachineBase & { machineType: Type } {
   const base = parseBase(rawData, "machine");
 
   const powerConsumption = Number.parseFloat(rawData.mPowerConsumption);
@@ -194,7 +194,7 @@ function parseManufacturingMachines(
  * Parse the base data for a manufacturing machine.
  */
 function parseBaseManufacturingMachine(
-  rawData: RawManufacturingMachine,
+  rawData: Immutable<RawManufacturingMachine>,
   machineType: MachineType.MANUFACTURING
 ): ManufacturingMachine;
 
@@ -202,12 +202,12 @@ function parseBaseManufacturingMachine(
  * Parse the base data for a variable power manufacturing machine.
  */
 function parseBaseManufacturingMachine(
-  rawData: RawManufacturingMachine,
+  rawData: Immutable<RawManufacturingMachine>,
   machineType: MachineType.MANUFACTURING_VARIABLE_POWER
 ): ManufacturingVariablePowerMachine;
 
 function parseBaseManufacturingMachine(
-  rawData: RawManufacturingMachine,
+  rawData: Immutable<RawManufacturingMachine>,
   machineType: ManufacturingMachineBase["machineType"]
 ): ManufacturingMachineBase {
   const base = parseMachineBase(rawData, machineType);
@@ -225,7 +225,7 @@ function parseBaseManufacturingMachine(
  * Parse the data for a manufacturing machine.
  */
 function parseManufacturingMachine(
-  rawData: RawManufacturingMachine
+  rawData: Immutable<RawManufacturingMachine>
 ): [string, ManufacturingMachine] {
   const base = parseBaseManufacturingMachine(
     rawData,
@@ -258,7 +258,7 @@ function parseManufacturerVariablePowerMachines(
  * Parse the data for a variable power manufacturing machine.
  */
 function parseManufacturingVariablePowerMachine(
-  rawData: RawManufacturingVariablePowerMachine
+  rawData: Immutable<RawManufacturingVariablePowerMachine>
 ): [string, ManufacturingVariablePowerMachine] {
   const base = parseBaseManufacturingMachine(
     rawData,
@@ -307,7 +307,7 @@ function parseNodeExtractingMachines(
  * Parse the data for a node extracting machine.
  */
 function parseNodeExtractingMachine(
-  rawData: RawExtractingMachine
+  rawData: Immutable<RawExtractingMachine>
 ): [string, NodeExtractingMachine] {
   const base = parseMachineBase(rawData, MachineType.EXTRACTING);
 
@@ -443,7 +443,7 @@ function parseWellExtractingMachines(
  * Parse the data for a well extracting machine.
  */
 function parseFrackingActivatorMachine(
-  rawData: RawFrackingActivatorMachine
+  rawData: Immutable<RawFrackingActivatorMachine>
 ): [string, Omit<FrackingActivatorMachine, "extractors">] {
   const base = parseMachineBase(rawData, MachineType.FRACKING_ACTIVATOR);
   return [
@@ -458,7 +458,7 @@ function parseFrackingActivatorMachine(
  * Parse the data for a well activating machine.
  */
 function parseFrackingExtractorMachine(
-  rawData: RawExtractingMachine
+  rawData: Immutable<RawExtractingMachine>
 ): [string, Omit<FrackingExtractorMachine, "activatingMachine">] {
   const [className, base] = parseNodeExtractingMachine(rawData);
   return [
@@ -530,7 +530,7 @@ function parseWaterPumpMachines(
  * Parse the data for a water pump machine.
  */
 function parseWaterPumpMachine(
-  rawData: RawExtractingMachine
+  rawData: Immutable<RawExtractingMachine>
 ): [string, NodeExtractingMachine] {
   return parseNodeExtractingMachine(rawData);
 }
@@ -539,7 +539,7 @@ function parseWaterPumpMachine(
  * Parse the base data for a power producing machine.
  */
 function parseBasePowerProducingMachine(
-  rawData: RawPowerProducingMachineBase,
+  rawData: Immutable<RawPowerProducingMachineBase>,
   machineType: MachineType.POWER_PRODUCING
 ): PowerProducingMachine;
 
@@ -547,12 +547,12 @@ function parseBasePowerProducingMachine(
  * Parse the base data for a variable power producing machine.
  */
 function parseBasePowerProducingMachine(
-  rawData: RawPowerProducingMachineBase,
+  rawData: Immutable<RawPowerProducingMachineBase>,
   machineType: MachineType.VARIABLE_POWER_PRODUCING
 ): VariablePowerProducingMachine;
 
 function parseBasePowerProducingMachine(
-  rawData: RawPowerProducingMachineBase,
+  rawData: Immutable<RawPowerProducingMachineBase>,
   machineType: PowerProducingMachineBase["machineType"]
 ): PowerProducingMachineBase {
   const base = parseMachineBase(rawData, machineType);
@@ -768,7 +768,7 @@ function parseItemSinkMachines(
  * Parse the data for an item sink machines.
  */
 function parseItemSinkMachine(
-  rawData: RawItemSinkMachine,
+  rawData: Immutable<RawItemSinkMachine>,
   itemsById: ImmutableMap<string, Item>
 ): [string, ItemSinkMachine] {
   const base = parseMachineBase(rawData, MachineType.ITEM_SINK);

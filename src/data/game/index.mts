@@ -1,8 +1,12 @@
 import assert from "node:assert";
 
 import gameJsonData from "data/game-data.json" assert { type: "json" };
-import { pipe, concat, filter, map, spread } from "iter-ops";
-import type { ImmutableArray, ImmutableMap } from "src/immutable-types.mjs";
+import { pipe, concat, filter, flatMap, map } from "iter-ops";
+import type {
+  Immutable,
+  ImmutableArray,
+  ImmutableMap,
+} from "src/immutable-types.mjs";
 import { isObject } from "src/utils.mjs";
 
 import type { Item } from "./items/index.mjs";
@@ -59,7 +63,7 @@ export function loadItems(
  */
 export function loadMachines(
   rawGameDataByNativeClass: ImmutableMap<string, ImmutableArray<unknown>>,
-  items: Readonly<{
+  items: Immutable<{
     byInternalClassName: ImmutableMap<string, Item>;
     byId: ImmutableMap<Item["id"], Item>;
   }>
@@ -95,15 +99,15 @@ export function loadRecipes(
   const machineRecipes = pipe(
     machinesByInternalClassName.values(),
     filter(hasMachineRecipes),
-    map((machineWithRecipes) => {
-      return [...machineWithRecipes.machineRecipes.values()].map(
-        (recipe): [Recipe["id"], Recipe] => [
+    flatMap((machineWithRecipes) =>
+      pipe(
+        machineWithRecipes.machineRecipes.values(),
+        map((recipe): [Recipe["id"], Recipe] => [
           recipe.id,
           { ...recipe, canBeProducedIn: new Set([machineWithRecipes]) },
-        ]
-      );
-    }),
-    spread()
+        ])
+      )
+    )
   );
 
   return new Map(pipe([], concat(baseRecipes, machineRecipes)));

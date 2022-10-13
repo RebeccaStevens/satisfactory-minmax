@@ -19,7 +19,7 @@
     "change-case": "^4.1.2",
     "fs-extra": "^10.1.0",
     "highs": "^0.7.2",
-    "iter-ops": "^2.0.0-beta.4"
+    "iter-ops": "^2.0.0-beta.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",
@@ -37,7 +37,7 @@
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-ava": "^13.2.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-functional": "^5.0.0-beta.8",
+    "eslint-plugin-functional": "^5.0.0-beta.9",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsdoc": "^39.3.6",
     "eslint-plugin-markdown": "^3.0.0",
