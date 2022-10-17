@@ -4,6 +4,8 @@ declare global {
       object: ObjectType,
       key: Key
     ): object is ObjectType & Record<Key, unknown>;
+
+    entries(o: {}): [string, unknown][];
   }
 
   interface ArrayConstructor {

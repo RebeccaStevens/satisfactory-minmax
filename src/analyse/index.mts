@@ -22,15 +22,13 @@ export function analyseResult(
   }
 
   const recipeCounts = new Map(
-    Object.entries(result.Columns).map(
-      ([key, value]: Immutable<[string, unknown]>) => {
-        assert(Object.hasOwn(value, "Primal"));
-        assert(typeof value.Primal === "number");
-        assert(Number.isFinite(value.Primal));
+    Object.entries(result.Columns).map(([key, value]) => {
+      assert(Object.hasOwn(value, "Primal"));
+      assert(typeof value.Primal === "number");
+      assert(Number.isFinite(value.Primal));
 
-        return [key, value.Primal];
-      }
-    )
+      return [key, value.Primal];
+    })
   );
 
   const state = new Map(
