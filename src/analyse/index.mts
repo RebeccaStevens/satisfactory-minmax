@@ -126,7 +126,10 @@ export function analyseResult(
       }),
       filter(isNotNull)
     ),
-  ].join("\n");
+  ]
+    .sort()
+    .reverse()
+    .join("\n");
 
   console.log("output rates:", outputRates);
   console.log();
