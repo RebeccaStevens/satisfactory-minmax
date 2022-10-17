@@ -24,7 +24,7 @@ import type {
 import { RecipeType } from "src/data/game/recipes/types.mjs";
 import { ResourceNodeExtractorType } from "src/data/map/types.mjs";
 import type { Data } from "src/data/types.mjs";
-import type { Immutable } from "src/immutable-types.mjs";
+import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 import { isNotNull, transpose } from "src/utils.mjs";
 
 import {
@@ -38,7 +38,8 @@ import {
  * Get all the recipes once applied to the possible machines.
  */
 export function getAppliedRecipes(
-  data: Immutable<Data>
+  data: Immutable<Data>,
+  setOverclocks?: ImmutableMap<PartRecipe["id"], number>
 ): Map<AppliedRecipe["id"], Immutable<AppliedRecipe>> {
   return new Map(
     pipe(
@@ -86,7 +87,7 @@ export function getAppliedRecipes(
               // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
               assert(recipe.recipeType === RecipeType.PART);
 
-              return getAppliedPartRecipes(recipe, machine);
+              return getAppliedPartRecipes(recipe, machine, setOverclocks);
             }
           ),
           filter(isNotNull)
@@ -333,9 +334,10 @@ function getAppliedResourceWellRecipes(
  */
 function getAppliedPartRecipes(
   recipe: Immutable<PartRecipe>,
-  machine: Immutable<Machine>
+  machine: Immutable<Machine>,
+  setOverclocks?: ImmutableMap<PartRecipe["id"], number>
 ): Array<[AppliedRecipe["id"], Immutable<AppliedRecipe>]> {
-  const overclock = machine.id === "machine_particle_accelerator" ? 0.5 : 1;
+  const overclock = setOverclocks?.get(recipe.id) ?? 1;
   const efficiencyMultiplier = 1;
   const id = snakeCase(`recipe ${recipe.name} in ${machine.name}`);
 

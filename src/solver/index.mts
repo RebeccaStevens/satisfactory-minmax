@@ -1,4 +1,4 @@
-import type { Data, Item } from "src/data/index.mjs";
+import type { Data, Item, PartRecipe } from "src/data/index.mjs";
 import type { Immutable, ImmutableMap } from "src/immutable-types.mjs";
 
 import { getAppliedRecipes } from "./applied-recipes.mjs";
@@ -8,9 +8,10 @@ export async function runSolver(
   data: Immutable<Data>,
   itemToMax: Immutable<Item>,
   excessPower = 0,
-  excessItems?: ImmutableMap<Item, number>
+  excessItems?: ImmutableMap<Item, number>,
+  setOverclocks?: ImmutableMap<PartRecipe["id"], number>
 ) {
-  const appliedRecipes = getAppliedRecipes(data);
+  const appliedRecipes = getAppliedRecipes(data, setOverclocks);
 
   const lp = await loadLp(
     data,
