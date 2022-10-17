@@ -1,23 +1,23 @@
-export type { ReadonlyDeep as Immutable } from "type-fest";
-
 /**
  * The same as `Readonly` but works with arrays.
  */
-export type ImmutableShallow<T extends {}> = {
-  readonly [P in keyof T & {}]: T[P];
-};
+export type Immutable<T extends {}> = T extends ReadonlyArray<unknown>
+  ? {
+      readonly [P in keyof (T & {})]: T[P];
+    }
+  : Readonly<T>;
 
 /**
  * An Immutable array.
  */
-export type ImmutableArray<T> = ImmutableShallow<ReadonlyArray<T>>;
+export type ImmutableArray<T> = Immutable<ReadonlyArray<T>>;
 
 /**
  * An Immutable set.
  */
-export type ImmutableSet<T> = ImmutableShallow<ReadonlySet<T>>;
+export type ImmutableSet<T> = Immutable<ReadonlySet<T>>;
 
 /**
  * An Immutable map.
  */
-export type ImmutableMap<K, V> = ImmutableShallow<ReadonlyMap<K, V>>;
+export type ImmutableMap<K, V> = Immutable<ReadonlyMap<K, V>>;

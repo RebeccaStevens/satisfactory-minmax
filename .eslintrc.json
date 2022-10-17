@@ -33,7 +33,7 @@
       {
         "enforcement": "None",
         "parameters": {
-          "enforcement": "Immutable",
+          "enforcement": "ReadonlyShallow",
           "ignoreInferredTypes": true
         }
       }

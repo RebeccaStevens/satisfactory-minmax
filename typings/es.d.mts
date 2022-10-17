@@ -5,6 +5,8 @@ declare global {
       key: Key
     ): object is ObjectType & Record<Key, unknown>;
 
+    entries<T>(o: { [s: string]: T } | ArrayLike<T>): [string, T][];
+
     entries(o: {}): [string, unknown][];
   }
 
