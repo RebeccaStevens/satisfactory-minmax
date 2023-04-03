@@ -3867,9 +3867,9 @@ __metadata:
   linkType: hard
 
 "iter-ops@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "iter-ops@npm:2.0.2"
-  checksum: 2f0e23de87b049108b5cce845c9aba144b868b98adb4ff64390e3007bdc60bfdad47576570994e29416c99961f45e59c1e5494b404d84c1d889b75da8c334bd9
+  version: 2.9.2
+  resolution: "iter-ops@npm:2.9.2"
+  checksum: 4072fe82fc23d2cffbd539cd10c2146853c87e9435154fdbc2863348e9c1985cfa2090c491ae2e4609752597bbf173a009cb00d5b06d098850d5e6f16fb1f81a
   languageName: node
   linkType: hard
 
