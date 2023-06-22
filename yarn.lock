@@ -730,27 +730,26 @@ __metadata:
   linkType: hard
 
 "@rebeccastevens/eslint-config@npm:^1.4.4":
-  version: 1.4.4
-  resolution: "@rebeccastevens/eslint-config@npm:1.4.4"
+  version: 1.7.8
+  resolution: "@rebeccastevens/eslint-config@npm:1.7.8"
   dependencies:
-    deepmerge-ts: ^4.0.0
+    deepmerge-ts: ^5.1.0
   peerDependencies:
     "@typescript-eslint/eslint-plugin": "*"
     "@typescript-eslint/parser": "*"
-    eslint: ">=8.0.0"
+    eslint: ">=8.24.0"
     eslint-import-resolver-typescript: "*"
     eslint-plugin-eslint-comments: "*"
     eslint-plugin-functional: ">=5.0.0"
     eslint-plugin-import: "*"
     eslint-plugin-jsdoc: "*"
     eslint-plugin-markdown: "*"
-    eslint-plugin-node: "*"
+    eslint-plugin-n: "*"
     eslint-plugin-optimize-regex: "*"
     eslint-plugin-promise: "*"
     eslint-plugin-sonarjs: "*"
-    eslint-plugin-tsdoc: "*"
     eslint-plugin-unicorn: "*"
-  checksum: 14f980463dda41db41308702486c1770ab2d9b041b4358a96309b4a9a2bcc25e6b33d29f5478a6638415b8f94433417c62c640e75220f3568a9ce03e5249b5b2
+  checksum: ef1a1c17c94fa60ba08f28c0e96bdc339ef118e82d15eca803c839180e96fa7d2f41fe4d52ed610d672957e65b32daac5d1ca68a1ab11256d18f3b78404c8fd5
   languageName: node
   linkType: hard
 
@@ -1934,10 +1933,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge-ts@npm:^4.0.0, deepmerge-ts@npm:^4.2.2":
+"deepmerge-ts@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge-ts@npm:4.2.2"
   checksum: 137c3650519d9b1a220db7e23a3f56304cd02e7f97b2b8392e2767251055a29318425bacdb2ab2ff175a4645f7179643acf0e038d5dafbfdbc11bdf322f79697
+  languageName: node
+  linkType: hard
+
+"deepmerge-ts@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "deepmerge-ts@npm:5.1.0"
+  checksum: 6b57db93c2985e4a35f24b2451db31715050d143988b7d6346f4049c9aec21a6c289514b88d3ee3d6e0697e72ef5d96ff0bbb7cb75422d56fee55ee85c7168e7
   languageName: node
   linkType: hard
 
