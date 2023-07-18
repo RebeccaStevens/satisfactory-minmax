@@ -729,28 +729,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rebeccastevens/eslint-config@npm:^1.4.4":
-  version: 1.4.4
-  resolution: "@rebeccastevens/eslint-config@npm:1.4.4"
+"@rebeccastevens/eslint-config@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@rebeccastevens/eslint-config@npm:2.0.0"
   dependencies:
-    deepmerge-ts: ^4.0.0
+    deepmerge-ts: ^5.1.0
   peerDependencies:
-    "@typescript-eslint/eslint-plugin": "*"
-    "@typescript-eslint/parser": "*"
-    eslint: ">=8.0.0"
+    "@typescript-eslint/eslint-plugin": ">=6.0.0"
+    "@typescript-eslint/parser": ">=6.0.0"
+    eslint: ">=8.24.0"
     eslint-import-resolver-typescript: "*"
     eslint-plugin-eslint-comments: "*"
     eslint-plugin-functional: ">=5.0.0"
     eslint-plugin-import: "*"
     eslint-plugin-jsdoc: "*"
     eslint-plugin-markdown: "*"
-    eslint-plugin-node: "*"
+    eslint-plugin-n: "*"
     eslint-plugin-optimize-regex: "*"
     eslint-plugin-promise: "*"
     eslint-plugin-sonarjs: "*"
-    eslint-plugin-tsdoc: "*"
     eslint-plugin-unicorn: "*"
-  checksum: 14f980463dda41db41308702486c1770ab2d9b041b4358a96309b4a9a2bcc25e6b33d29f5478a6638415b8f94433417c62c640e75220f3568a9ce03e5249b5b2
+  checksum: defa7f548ac978d4024d922655dc486ee558ac8bb8048062a2cb059e48f8ec2454a3ad2b2aef692ccf5b76af10c78eeafc9ef8d389d95b913ad375448dc46f05
   languageName: node
   linkType: hard
 
@@ -1934,10 +1933,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge-ts@npm:^4.0.0, deepmerge-ts@npm:^4.2.2":
+"deepmerge-ts@npm:^4.2.2":
   version: 4.2.2
   resolution: "deepmerge-ts@npm:4.2.2"
   checksum: 137c3650519d9b1a220db7e23a3f56304cd02e7f97b2b8392e2767251055a29318425bacdb2ab2ff175a4645f7179643acf0e038d5dafbfdbc11bdf322f79697
+  languageName: node
+  linkType: hard
+
+"deepmerge-ts@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "deepmerge-ts@npm:5.1.0"
+  checksum: 6b57db93c2985e4a35f24b2451db31715050d143988b7d6346f4049c9aec21a6c289514b88d3ee3d6e0697e72ef5d96ff0bbb7cb75422d56fee55ee85c7168e7
   languageName: node
   linkType: hard
 
@@ -5160,7 +5166,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": ^17.1.2
     "@commitlint/config-conventional": ^17.1.0
-    "@rebeccastevens/eslint-config": ^1.4.4
+    "@rebeccastevens/eslint-config": ^2.0.0
     "@types/fs-extra": ^9.0.13
     "@types/node": ^17.0.38
     "@typescript-eslint/eslint-plugin": ^5.36.1
