@@ -4222,12 +4222,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"marked@npm:^4.1.0":
-  version: 4.1.1
-  resolution: "marked@npm:4.1.1"
+"marked@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "marked@npm:6.0.0"
   bin:
     marked: bin/marked.js
-  checksum: 717e3357952ee53de831bf0eb110ed075bebca2376c58bcdf7ee523ef540d45308ad6d51b2c933da0968832ea4386f31c142ca65443e77c098e84f6cce73e418
+  checksum: 1b02d4254d8aeec4d54799d2191821fd86da8c743361065b523617d1c226ba14ebd8677dc7bef7fa183a4253217c53d0d56e82d378a78b5a1ebaf8409e90136e
   languageName: node
   linkType: hard
 
@@ -5190,7 +5190,7 @@ __metadata:
     iter-ops: ^2.0.2
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
-    marked: ^4.1.0
+    marked: ^6.0.0
     prettier: ^2.7.1
     rimraf: ^3.0.2
     tslib: ^2.4.0
