@@ -30,7 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
     "commitizen": "^4.2.5",
-    "cspell": "^6.10.1",
+    "cspell": "^7.0.0",
     "esbuild-node-loader": "^0.8.0",
     "eslint": "^8.24.0",
     "eslint-config-prettier": "^8.5.0",
