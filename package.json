@@ -16,7 +16,7 @@
     "start": "node --experimental-json-modules --enable-source-maps --experimental-loader esbuild-node-loader ./src/index.mts"
   },
   "dependencies": {
-    "change-case": "^4.1.2",
+    "change-case": "^5.0.0",
     "fs-extra": "^10.1.0",
     "highs": "^0.7.2",
     "iter-ops": "^2.0.2"
