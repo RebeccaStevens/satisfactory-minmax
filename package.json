@@ -22,8 +22,8 @@
     "iter-ops": "^2.0.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.1.2",
-    "@commitlint/config-conventional": "^17.1.0",
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
     "@rebeccastevens/eslint-config": "^1.4.4",
     "@types/fs-extra": "^9.0.13",
     "@types/node": "^17.0.38",
