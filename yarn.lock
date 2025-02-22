@@ -3394,9 +3394,9 @@ __metadata:
   linkType: hard
 
 "highs@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "highs@npm:0.7.2"
-  checksum: 53e97ae424c36a0bda2af46f4b9f50efd8d68fc7632302d0b845d04caa3f9699bfd24e6f7e69073ff56e0bd117aeb244677a5e01a4aefb35166d1e5fb24ec1ab
+  version: 0.7.4
+  resolution: "highs@npm:0.7.4"
+  checksum: 8ece967dd4ff030f42feaa2b87bfdd033be0ecc2ed8d7682a5f996743403136cae6f1ce680fa0762e1c140a285e7a321e5171aeaa5504ce2860d56b4a6e6555a
   languageName: node
   linkType: hard
 
