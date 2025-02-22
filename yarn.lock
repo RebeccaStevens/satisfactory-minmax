@@ -3866,10 +3866,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iter-ops@npm:^2.0.2":
-  version: 2.0.2
-  resolution: "iter-ops@npm:2.0.2"
-  checksum: 2f0e23de87b049108b5cce845c9aba144b868b98adb4ff64390e3007bdc60bfdad47576570994e29416c99961f45e59c1e5494b404d84c1d889b75da8c334bd9
+"iter-ops@npm:^3.0.0":
+  version: 3.5.0
+  resolution: "iter-ops@npm:3.5.0"
+  checksum: d5040b8138e10283dd59e8157b5f9a3b8db83ba8e9e3ce4f4a20a6e6179ba6bba1e640b14d88fefe8482daa14192a28bd7af4c5a7f62fb282e76fd7a2230e7bf
   languageName: node
   linkType: hard
 
@@ -5187,7 +5187,7 @@ __metadata:
     fs-extra: ^10.1.0
     highs: ^0.7.2
     husky: ^8.0.1
-    iter-ops: ^2.0.2
+    iter-ops: ^3.0.0
     lint-staged: ^13.0.3
     markdownlint-cli: ^0.32.2
     marked: ^4.1.0
