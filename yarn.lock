@@ -2598,11 +2598,11 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-promise@npm:^6.0.1":
-  version: 6.1.0
-  resolution: "eslint-plugin-promise@npm:6.1.0"
+  version: 6.6.0
+  resolution: "eslint-plugin-promise@npm:6.6.0"
   peerDependencies:
-    eslint: ^7.0.0 || ^8.0.0
-  checksum: 01c55f6c4ddbb3c1ac6ccd1e834365bf12d3aaf91b562ee9027b1ae3943eb86673d44a68ea3a303a93b9ce43dd51114751c3e644da27a6d4ee4d66c8f67ff72d
+    eslint: ^7.0.0 || ^8.0.0 || ^9.0.0
+  checksum: 5098fbf38585ad411737c389c462df72b11a7db2f0241eca23cf990e5535a2de3fac7fb24258c3e6bf05433ef2a59425ec1ca1cef456360614eb7cdbfefcec66
   languageName: node
   linkType: hard
 
