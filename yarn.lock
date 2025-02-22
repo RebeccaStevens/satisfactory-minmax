@@ -3393,10 +3393,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"highs@npm:^0.7.2":
-  version: 0.7.2
-  resolution: "highs@npm:0.7.2"
-  checksum: 53e97ae424c36a0bda2af46f4b9f50efd8d68fc7632302d0b845d04caa3f9699bfd24e6f7e69073ff56e0bd117aeb244677a5e01a4aefb35166d1e5fb24ec1ab
+"highs@npm:^1.0.0":
+  version: 1.8.0
+  resolution: "highs@npm:1.8.0"
+  checksum: 4d930ee9aba1028caf7426ac0666a8be179e4abc6a620d392f3abbf30232c9c5daf205ce24cb79c354f283f35154edf697cfb45bd790b3b40ac135bf5a592529
   languageName: node
   linkType: hard
 
@@ -5185,7 +5185,7 @@ __metadata:
     eslint-plugin-sonarjs: ^0.15.0
     eslint-plugin-unicorn: ^43.0.2
     fs-extra: ^10.1.0
-    highs: ^0.7.2
+    highs: ^1.0.0
     husky: ^8.0.1
     iter-ops: ^2.0.2
     lint-staged: ^13.0.3
