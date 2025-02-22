@@ -2546,14 +2546,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-markdown@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "eslint-plugin-markdown@npm:3.0.0"
+"eslint-plugin-markdown@npm:^5.0.0":
+  version: 5.1.0
+  resolution: "eslint-plugin-markdown@npm:5.1.0"
   dependencies:
     mdast-util-from-markdown: ^0.8.5
   peerDependencies:
-    eslint: ^6.0.0 || ^7.0.0 || ^8.0.0
-  checksum: ea9e8613cffcf7decbc2de0c900a83553ccdccfb6d90187e5d461a457a403d2634585a8c165cc4adf52c86f3b910161f33b1f24a46f296c4a577d2547780c997
+    eslint: ">=8"
+  checksum: 3fa9a8dcc4a8868ca3e831c19c45465ce09fc6135d6f8ffea58805768df7a26d339905c677967a7867686c2511063f5f2abf5f5b9c1edd3b69af51a5422b03dd
   languageName: node
   linkType: hard
 
@@ -5177,7 +5177,7 @@ __metadata:
     eslint-plugin-functional: ^5.0.0-beta.10
     eslint-plugin-import: ^2.26.0
     eslint-plugin-jsdoc: ^39.3.6
-    eslint-plugin-markdown: ^3.0.0
+    eslint-plugin-markdown: ^5.0.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-optimize-regex: ^1.2.1
     eslint-plugin-prettier: ^4.0.0
