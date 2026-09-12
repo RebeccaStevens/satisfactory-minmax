@@ -18,7 +18,7 @@
   "dependencies": {
     "change-case": "^4.1.2",
     "fs-extra": "^10.1.0",
-    "highs": "^0.7.2",
+    "highs": "^1.0.0",
     "iter-ops": "^2.0.2"
   },
   "devDependencies": {
