@@ -2391,14 +2391,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.5.0":
-  version: 8.5.0
-  resolution: "eslint-config-prettier@npm:8.5.0"
+"eslint-config-prettier@npm:^10.0.0":
+  version: 10.1.9
+  resolution: "eslint-config-prettier@npm:10.1.9"
   peerDependencies:
     eslint: ">=7.0.0"
   bin:
     eslint-config-prettier: bin/cli.js
-  checksum: 0d0f5c32e7a0ad91249467ce71ca92394ccd343178277d318baf32063b79ea90216f4c81d1065d60f96366fdc60f151d4d68ae7811a58bd37228b84c2083f893
+  checksum: 44b7dc82d4575e1375eabd8f2d3cda963ab65cff09492f7fc46a782f4a379729c2d98c3dfef0be68fddffd76e0e04b673cf96bf2ea3d749124fe74063cce7bb0
   languageName: node
   linkType: hard
 
@@ -5170,7 +5170,7 @@ __metadata:
     cspell: ^6.10.1
     esbuild-node-loader: ^0.8.0
     eslint: ^8.24.0
-    eslint-config-prettier: ^8.5.0
+    eslint-config-prettier: ^10.0.0
     eslint-import-resolver-typescript: ^3.5.1
     eslint-plugin-ava: ^13.2.0
     eslint-plugin-eslint-comments: ^3.2.0
